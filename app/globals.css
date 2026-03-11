@@ -79,11 +79,34 @@ body::before {
   letter-spacing: 0.1em;
 }
 
-/* Specimen card hover */
+/* Specimen card hover & focus */
 .specimen-card {
-  transition: border-color 0.2s ease, outline-color 0.2s ease;
+  transition:
+    border-color 0.25s ease,
+    box-shadow 0.25s ease,
+    transform 0.25s ease;
 }
 .specimen-card:hover {
   border-color: var(--umber);
-  outline-color: var(--umber);
+  box-shadow: 0 4px 16px rgba(44, 36, 22, 0.1);
+  transform: translateY(-2px);
+}
+.specimen-card:hover::before {
+  border-color: var(--umber);
+}
+.specimen-card:focus-visible {
+  outline: 2px solid var(--umber);
+  outline-offset: 6px;
+  border-color: var(--umber);
+}
+.specimen-card:focus-visible::before {
+  border-color: var(--umber);
+}
+
+/* Editorial and text moment card hover */
+.botanical-border {
+  transition: box-shadow 0.25s ease, transform 0.25s ease;
+}
+.botanical-border:hover {
+  box-shadow: 0 2px 12px rgba(44, 36, 22, 0.06);
 }
