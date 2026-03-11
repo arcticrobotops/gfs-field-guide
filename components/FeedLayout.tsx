@@ -64,7 +64,7 @@ export default function FeedLayout({
         const note = getFieldNote(fieldNoteIndex);
         feed.push(
           <div key={`note-${fieldNoteIndex}`} className="col-span-1">
-            <TextMoment content={note} />
+            <TextMoment content={note} observationIndex={fieldNoteIndex} />
           </div>
         );
         fieldNoteIndex++;

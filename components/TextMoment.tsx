@@ -1,5 +1,6 @@
 interface TextMomentProps {
   content: string;
+  observationIndex?: number;
 }
 
 const FIELD_NOTES: string[] = [
@@ -13,44 +14,64 @@ export function getFieldNote(index: number): string {
   return FIELD_NOTES[index % FIELD_NOTES.length];
 }
 
-export default function TextMoment({ content }: TextMomentProps) {
+export default function TextMoment({ content, observationIndex }: TextMomentProps) {
   const lines = content.split('\n');
+  const obsNumber = observationIndex !== undefined
+    ? String(observationIndex + 1).padStart(2, '0')
+    : undefined;
 
   return (
     <div className="botanical-border bg-parchment p-5 sm:p-6">
-      {/* Header */}
-      <p className="font-mono text-[10px] tracking-[0.3em] text-plate-border uppercase small-caps mb-4">
-        Field Notes
-      </p>
+      {/* Header with observation number */}
+      <div className="flex items-baseline justify-between mb-2">
+        <p className="font-mono text-[10px] tracking-[0.3em] text-plate-border uppercase small-caps">
+          Field Notes
+        </p>
+        {obsNumber && (
+          <span className="font-mono text-[9px] tracking-[0.15em] text-plate-border/60">
+            Obs. {obsNumber}
+          </span>
+        )}
+      </div>
 
-      {/* Decorative rule */}
-      <div className="border-t border-plate-border/40 mb-4" />
+      {/* Compass ornament rule */}
+      <div className="flex items-center gap-2 mb-4">
+        <div className="flex-1 border-t border-plate-border/40" />
+        <span className="font-mono text-[8px] text-plate-border/50 leading-none">&#9678;</span>
+        <div className="flex-1 border-t border-plate-border/40" />
+      </div>
 
-      {/* Content */}
-      <div className="space-y-2">
+      {/* Content with improved label/value contrast */}
+      <div className="space-y-2.5">
         {lines.map((line, i) => {
-          const [label, ...rest] = line.split(':');
-          const value = rest.join(':').trim();
-          if (value) {
+          const colonIndex = line.indexOf(':');
+          if (colonIndex === -1) {
             return (
-              <p key={i} className="font-serif text-sm text-ink leading-relaxed">
-                <span className="font-mono text-[10px] tracking-[0.15em] text-sage uppercase">
-                  {label}:
-                </span>{' '}
-                <span className="italic text-forest">{value}</span>
+              <p key={i} className="font-serif text-sm italic text-forest leading-relaxed">
+                {line}
               </p>
             );
           }
+          const label = line.slice(0, colonIndex);
+          const value = line.slice(colonIndex + 1).trim();
           return (
-            <p key={i} className="font-serif text-sm italic text-forest leading-relaxed">
-              {line}
+            <p key={i} className="text-sm leading-relaxed">
+              <span className="font-mono text-[10px] tracking-[0.15em] text-plate-border uppercase">
+                {label}
+              </span>
+              <span className="font-mono text-[10px] text-plate-border/50 mx-1">/</span>
+              <span className="font-serif italic text-forest">{value}</span>
             </p>
           );
         })}
       </div>
 
-      {/* Bottom decorative rule */}
-      <div className="border-t border-plate-border/40 mt-4" />
+      {/* Bottom compass ornament rule */}
+      <div className="flex items-center gap-2 mt-4">
+        <div className="flex-1 border-t border-plate-border/40" />
+        <span className="font-mono text-[8px] text-plate-border/50 leading-none">&#9678;</span>
+        <div className="flex-1 border-t border-plate-border/40" />
+      </div>
     </div>
   );
 }
