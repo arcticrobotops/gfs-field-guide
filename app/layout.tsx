@@ -22,15 +22,43 @@ const dmSans = DM_Sans({
   display: "swap",
 });
 
+const siteUrl = "https://ghostforestsurfclub.com";
+
 export const metadata: Metadata = {
-  title: "Ghost Forest Surf Club \u2014 A Field Guide to Coastal Goods",
+  title: {
+    default: "Ghost Forest Surf Club | A Field Guide to Coastal Goods",
+    template: "%s | Ghost Forest Surf Club",
+  },
   description:
-    "Specimen catalog of coldwater surf goods. 45.10\u00b0N, 123.98\u00b0W. First Edition.",
+    "Specimen catalog of coldwater surf goods, curated from the northern Oregon coast. First Edition. 45.10\u00b0N, 123.98\u00b0W.",
+  metadataBase: new URL(siteUrl),
   openGraph: {
-    title: "Ghost Forest Surf Club \u2014 A Field Guide to Coastal Goods",
-    description:
-      "Specimen catalog of coldwater surf goods. 45.10\u00b0N, 123.98\u00b0W. First Edition.",
+    type: "website",
+    locale: "en_US",
+    url: siteUrl,
     siteName: "Ghost Forest Surf Club",
+    title: "Ghost Forest Surf Club | A Field Guide to Coastal Goods",
+    description:
+      "Specimen catalog of coldwater surf goods, curated from the northern Oregon coast. First Edition. 45.10\u00b0N, 123.98\u00b0W.",
+    images: [
+      {
+        url: "/og-image.jpg",
+        width: 1200,
+        height: 630,
+        alt: "Ghost Forest Surf Club - A Field Guide to Coastal Goods",
+      },
+    ],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Ghost Forest Surf Club | A Field Guide to Coastal Goods",
+    description:
+      "Specimen catalog of coldwater surf goods, curated from the northern Oregon coast. First Edition.",
+    images: ["/og-image.jpg"],
+  },
+  robots: {
+    index: true,
+    follow: true,
   },
 };
 
