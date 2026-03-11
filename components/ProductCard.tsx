@@ -10,6 +10,7 @@ export default function ProductCard({ product, index }: ProductCardProps) {
   const image = product.images.edges[0]?.node;
   const price = parseFloat(product.priceRange.minVariantPrice.amount);
   const maxPrice = parseFloat(product.priceRange.maxVariantPrice.amount);
+  const currencyCode = product.priceRange.minVariantPrice.currencyCode;
   const collection = product.collections.edges[0]?.node;
   const specimenNumber = String(index + 1).padStart(3, '0');
 
@@ -20,10 +21,10 @@ export default function ProductCard({ product, index }: ProductCardProps) {
       rel="noopener noreferrer"
       className="botanical-border specimen-card block bg-parchment p-4 sm:p-5 cursor-pointer group"
     >
-      {/* Specimen number */}
-      <div className="flex items-baseline justify-between mb-3">
-        <span className="font-mono text-[11px] tracking-[0.2em] text-plate-border">
-          No. {specimenNumber}
+      {/* Specimen number header */}
+      <div className="flex items-baseline justify-between mb-2">
+        <span className="font-mono text-[10px] tracking-[0.2em] text-plate-border uppercase">
+          Specimen No. {specimenNumber}
         </span>
         {product.productType && (
           <span className="font-mono text-[9px] tracking-[0.15em] text-sage uppercase">
@@ -31,6 +32,9 @@ export default function ProductCard({ product, index }: ProductCardProps) {
           </span>
         )}
       </div>
+
+      {/* Thin rule separator */}
+      <div className="border-t border-plate-border/30 mb-4" />
 
       {/* Product image */}
       {image && (
@@ -52,14 +56,25 @@ export default function ProductCard({ product, index }: ProductCardProps) {
         {product.title}
       </h3>
 
-      {/* Taxonomy line */}
+      {/* Taxonomy line with italic labels */}
       {collection && (
-        <p className="font-mono text-[11px] italic text-sage tracking-wide mb-3">
-          &mdash; Genus: {collection.title}
+        <p className="font-mono text-[10px] text-sage tracking-wide mb-3">
+          <span className="italic">Genus:</span>{' '}
+          <span className="text-forest">{collection.title}</span>
+          {product.productType && (
+            <>
+              {' '}&middot;{' '}
+              <span className="italic">Form:</span>{' '}
+              <span className="text-forest">{product.productType}</span>
+            </>
+          )}
         </p>
       )}
 
-      {/* Price */}
+      {/* Thin rule before price */}
+      <div className="border-t border-plate-border/30 mb-3 mt-1" />
+
+      {/* Price with USD annotation */}
       <div className="flex items-baseline gap-2">
         <span className="font-mono text-sm text-ink">
           ${price.toFixed(0)}
@@ -69,6 +84,9 @@ export default function ProductCard({ product, index }: ProductCardProps) {
             &ndash; ${maxPrice.toFixed(0)}
           </span>
         )}
+        <span className="font-mono text-[9px] tracking-[0.15em] text-plate-border/70 uppercase ml-auto">
+          {currencyCode}
+        </span>
       </div>
     </a>
   );
