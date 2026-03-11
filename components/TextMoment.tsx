@@ -24,11 +24,11 @@ export default function TextMoment({ content, observationIndex }: TextMomentProp
     <div className="botanical-border bg-parchment p-5 sm:p-6">
       {/* Header with observation number */}
       <div className="flex items-baseline justify-between mb-2">
-        <p className="font-mono text-[11px] tracking-[0.3em] text-plate-border uppercase small-caps">
+        <p className="font-mono text-xs tracking-[0.3em] text-plate-border uppercase small-caps">
           Field Notes
         </p>
         {obsNumber && (
-          <span className="font-mono text-[11px] tracking-[0.15em] text-plate-border/60">
+          <span className="font-mono text-xs tracking-[0.15em] text-plate-border/60">
             Obs. {obsNumber}
           </span>
         )}
@@ -37,7 +37,7 @@ export default function TextMoment({ content, observationIndex }: TextMomentProp
       {/* Compass ornament rule */}
       <div className="flex items-center gap-2 mb-4">
         <div className="flex-1 border-t border-plate-border/40" />
-        <span className="font-mono text-[11px] text-plate-border/50 leading-none">&#9678;</span>
+        <span className="font-mono text-xs text-plate-border/50 leading-none">&#9678;</span>
         <div className="flex-1 border-t border-plate-border/40" />
       </div>
 
@@ -56,10 +56,10 @@ export default function TextMoment({ content, observationIndex }: TextMomentProp
           const value = line.slice(colonIndex + 1).trim();
           return (
             <p key={i} className="text-sm leading-relaxed">
-              <span className="font-mono text-[11px] tracking-[0.15em] text-plate-border uppercase">
+              <span className="font-mono text-xs tracking-[0.15em] text-plate-border uppercase">
                 {label}
               </span>
-              <span className="font-mono text-[11px] text-plate-border/50 mx-1">/</span>
+              <span className="font-mono text-xs text-plate-border/50 mx-1">/</span>
               <span className="font-serif italic text-forest">{value}</span>
             </p>
           );
@@ -69,7 +69,7 @@ export default function TextMoment({ content, observationIndex }: TextMomentProp
       {/* Bottom compass ornament rule */}
       <div className="flex items-center gap-2 mt-4">
         <div className="flex-1 border-t border-plate-border/40" />
-        <span className="font-mono text-[11px] text-plate-border/50 leading-none">&#9678;</span>
+        <span className="font-mono text-xs text-plate-border/50 leading-none">&#9678;</span>
         <div className="flex-1 border-t border-plate-border/40" />
       </div>
     </div>

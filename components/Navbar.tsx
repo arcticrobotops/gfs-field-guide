@@ -28,7 +28,7 @@ export default function Navbar({
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         {/* Brand name */}
         <div className="py-3 text-center">
-          <p className="font-mono text-[11px] tracking-[0.25em] text-sage uppercase">
+          <p className="font-mono text-xs tracking-[0.25em] text-sage uppercase">
             Ghost Forest Surf Club
           </p>
         </div>
@@ -40,7 +40,7 @@ export default function Navbar({
           <h1 className="font-serif text-xl sm:text-2xl md:text-3xl tracking-[0.15em] text-forest uppercase">
             A Field Guide to Coastal Goods
           </h1>
-          <p className="font-mono text-[11px] tracking-[0.3em] text-plate-border uppercase mt-1">
+          <p className="font-mono text-xs tracking-[0.3em] text-plate-border uppercase mt-1">
             First Edition &middot; Oregon Coast &middot; 45.10&deg;N
           </p>
         </div>
@@ -51,7 +51,7 @@ export default function Navbar({
         <nav aria-label="Collection filters" className="hidden md:flex items-center justify-center gap-2 py-3 flex-wrap">
           <button
             onClick={() => onCollectionChange('all')}
-            className={`px-3 py-2 min-h-[44px] font-mono text-[11px] tracking-[0.15em] uppercase transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-forest ${
+            className={`px-3 py-2 min-h-[44px] font-mono text-xs tracking-[0.15em] uppercase transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-forest ${
               activeCollection === 'all'
                 ? 'bg-forest text-parchment'
                 : 'text-ink hover:text-umber'
@@ -63,7 +63,7 @@ export default function Navbar({
             <button
               key={collection.handle}
               onClick={() => onCollectionChange(collection.handle)}
-              className={`px-3 py-2 min-h-[44px] font-mono text-[11px] tracking-[0.15em] uppercase transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-forest ${
+              className={`px-3 py-2 min-h-[44px] font-mono text-xs tracking-[0.15em] uppercase transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-forest ${
                 activeCollection === collection.handle
                   ? 'bg-forest text-parchment'
                   : 'text-ink hover:text-umber'
@@ -76,7 +76,7 @@ export default function Navbar({
 
         {/* Mobile hamburger */}
         <div className="md:hidden flex items-center justify-between py-3">
-          <span className="font-mono text-[11px] tracking-[0.15em] text-sage uppercase">
+          <span className="font-mono text-xs tracking-[0.15em] text-sage uppercase">
             {activeCollection === 'all'
               ? 'All Specimens'
               : filteredCollections.find((c) => c.handle === activeCollection)
@@ -128,7 +128,7 @@ export default function Navbar({
                 onCollectionChange('all');
                 setMobileMenuOpen(false);
               }}
-              className={`block w-full text-left px-3 py-3 min-h-[44px] font-mono text-[11px] tracking-[0.15em] uppercase transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-forest ${
+              className={`block w-full text-left px-3 py-3 min-h-[44px] font-mono text-xs tracking-[0.15em] uppercase transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-forest ${
                 activeCollection === 'all'
                   ? 'bg-forest text-parchment'
                   : 'text-ink hover:text-umber'
@@ -143,7 +143,7 @@ export default function Navbar({
                   onCollectionChange(collection.handle);
                   setMobileMenuOpen(false);
                 }}
-                className={`block w-full text-left px-3 py-3 min-h-[44px] font-mono text-[11px] tracking-[0.15em] uppercase transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-forest ${
+                className={`block w-full text-left px-3 py-3 min-h-[44px] font-mono text-xs tracking-[0.15em] uppercase transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-forest ${
                   activeCollection === collection.handle
                     ? 'bg-forest text-parchment'
                     : 'text-ink hover:text-umber'

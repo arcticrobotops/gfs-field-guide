@@ -6,6 +6,7 @@ import Navbar from './Navbar';
 import ProductCard from './ProductCard';
 import EditorialCard, { getEditorial } from './EditorialCard';
 import TextMoment, { getFieldNote } from './TextMoment';
+import ErrorBoundary from './ErrorBoundary';
 
 interface FeedLayoutProps {
   initialProducts: ShopifyProduct[];
@@ -50,12 +51,11 @@ export default function FeedLayout({
       if (productIndex > 0 && productIndex % 4 === 0) {
         const editorial = getEditorial(editorialIndex);
         feed.push(
-          <div
-            key={`editorial-${editorialIndex}`}
-            className="col-span-1 md:col-span-2"
-          >
-            <EditorialCard {...editorial} />
-          </div>
+          <ErrorBoundary key={`editorial-${editorialIndex}`}>
+            <div className="col-span-1 md:col-span-2">
+              <EditorialCard {...editorial} />
+            </div>
+          </ErrorBoundary>
         );
         editorialIndex++;
         globalIndex++;
@@ -65,9 +65,11 @@ export default function FeedLayout({
       if (productIndex > 0 && productIndex % 7 === 0) {
         const note = getFieldNote(fieldNoteIndex);
         feed.push(
-          <div key={`note-${fieldNoteIndex}`} className="col-span-1">
-            <TextMoment content={note} observationIndex={fieldNoteIndex} />
-          </div>
+          <ErrorBoundary key={`note-${fieldNoteIndex}`}>
+            <div className="col-span-1">
+              <TextMoment content={note} observationIndex={fieldNoteIndex} />
+            </div>
+          </ErrorBoundary>
         );
         fieldNoteIndex++;
         globalIndex++;
@@ -75,9 +77,11 @@ export default function FeedLayout({
 
       // Product card
       feed.push(
-        <div key={product.id} className="col-span-1">
-          <ProductCard product={product} index={productIndex} />
-        </div>
+        <ErrorBoundary key={product.id}>
+          <div className="col-span-1">
+            <ProductCard product={product} index={productIndex} />
+          </div>
+        </ErrorBoundary>
       );
       globalIndex++;
     });
@@ -87,21 +91,23 @@ export default function FeedLayout({
 
   return (
     <>
-      <Navbar
-        collections={collections}
-        activeCollection={activeCollection}
-        onCollectionChange={handleCollectionChange}
-      />
+      <ErrorBoundary>
+        <Navbar
+          collections={collections}
+          activeCollection={activeCollection}
+          onCollectionChange={handleCollectionChange}
+        />
+      </ErrorBoundary>
 
       <main className="mx-auto max-w-7xl px-5 sm:px-6 lg:px-8 py-8 sm:py-12">
         {/* Catalog introduction with volume numbering and double-rule framing */}
         <div className="max-w-xl mx-auto mb-12 sm:mb-16">
           <div className="double-rule mb-6" />
           <div className="text-center space-y-3">
-            <p className="font-mono text-[11px] tracking-[0.35em] text-plate-border/60 uppercase">
+            <p className="font-mono text-xs tracking-[0.35em] text-plate-border/60 uppercase">
               Vol. I &middot; First Edition
             </p>
-            <p className="font-mono text-[11px] tracking-[0.3em] text-plate-border uppercase">
+            <p className="font-mono text-xs tracking-[0.3em] text-plate-border uppercase">
               Specimen Catalog
             </p>
             <p className="font-serif text-sm italic text-sage max-w-md mx-auto leading-relaxed">
@@ -140,10 +146,10 @@ export default function FeedLayout({
         {!loading && error && (
           <div className="text-center py-20">
             <div className="botanical-border max-w-md mx-auto p-8 space-y-3">
-              <p className="font-mono text-[11px] tracking-[0.2em] text-plate-border/50">
+              <p className="font-mono text-xs tracking-[0.2em] text-plate-border/50">
                 &#9678;
               </p>
-              <p className="font-mono text-[11px] tracking-[0.2em] text-forest uppercase">
+              <p className="font-mono text-xs tracking-[0.2em] text-forest uppercase">
                 Catalog Temporarily Unavailable
               </p>
               <p className="font-serif text-sm italic text-sage/80">
@@ -151,7 +157,7 @@ export default function FeedLayout({
               </p>
               <button
                 onClick={() => handleCollectionChange(activeCollection)}
-                className="mt-4 px-6 py-3 bg-forest text-parchment font-mono text-[11px] tracking-[0.2em] uppercase hover:bg-forest/90 transition-colors min-h-[44px]"
+                className="mt-4 px-6 py-3 bg-forest text-parchment font-mono text-xs tracking-[0.2em] uppercase hover:bg-forest/90 transition-colors min-h-[44px]"
               >
                 Retry
               </button>
@@ -163,10 +169,10 @@ export default function FeedLayout({
         {!loading && !error && products.length === 0 && (
           <div className="text-center py-20">
             <div className="space-y-3">
-              <p className="font-mono text-[11px] tracking-[0.2em] text-plate-border/50">
+              <p className="font-mono text-xs tracking-[0.2em] text-plate-border/50">
                 &#9678;
               </p>
-              <p className="font-mono text-[11px] tracking-[0.2em] text-sage uppercase">
+              <p className="font-mono text-xs tracking-[0.2em] text-sage uppercase">
                 No specimens found in this collection.
               </p>
               <p className="font-serif text-xs italic text-sage/60">

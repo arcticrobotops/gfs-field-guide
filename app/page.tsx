@@ -2,6 +2,7 @@ import Image from 'next/image';
 import { getProducts, getCollections } from '@/lib/shopify';
 import FeedLayout from '@/components/FeedLayout';
 import Footer from '@/components/Footer';
+import ErrorBoundary from '@/components/ErrorBoundary';
 
 export const revalidate = 60;
 
@@ -49,7 +50,7 @@ export default async function Home() {
           {/* Double rule top */}
           <div className="flex items-center justify-center gap-4 mb-8">
             <div className="w-16 sm:w-24 border-t border-parchment/30" />
-            <span className="font-mono text-[11px] tracking-[0.3em] text-parchment/50 uppercase">Est. 2025</span>
+            <span className="font-mono text-xs tracking-[0.3em] text-parchment/50 uppercase">Est. 2025</span>
             <div className="w-16 sm:w-24 border-t border-parchment/30" />
           </div>
 
@@ -59,7 +60,7 @@ export default async function Home() {
             Surf Club
           </h1>
 
-          <p className="font-mono text-[11px] tracking-[0.3em] text-parchment/60 uppercase mb-6">
+          <p className="font-mono text-xs tracking-[0.3em] text-parchment/60 uppercase mb-6">
             A Field Guide to Coastal Goods
           </p>
 
@@ -87,16 +88,18 @@ export default async function Home() {
           {/* Double rule bottom */}
           <div className="flex items-center justify-center gap-4 mt-10">
             <div className="w-16 sm:w-24 border-t border-parchment/30" />
-            <span className="font-mono text-[11px] text-parchment/40">45.10&deg;N, 123.98&deg;W</span>
+            <span className="font-mono text-xs text-parchment/40">45.10&deg;N, 123.98&deg;W</span>
             <div className="w-16 sm:w-24 border-t border-parchment/30" />
           </div>
         </div>
       </section>
 
-      <FeedLayout
-        initialProducts={products}
-        collections={collections}
-      />
+      <ErrorBoundary>
+        <FeedLayout
+          initialProducts={products}
+          collections={collections}
+        />
+      </ErrorBoundary>
       <Footer />
     </div>
   );

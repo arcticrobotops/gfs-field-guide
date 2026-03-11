@@ -22,11 +22,11 @@ export default function ProductCard({ product, index }: ProductCardProps) {
     >
       {/* Specimen number header */}
       <div className="flex items-baseline justify-between mb-2">
-        <span className="font-mono text-[11px] tracking-[0.2em] text-plate-border uppercase">
+        <span className="font-mono text-xs tracking-[0.2em] text-plate-border uppercase">
           Specimen No. {specimenNumber}
         </span>
         {product.productType && (
-          <span className="font-mono text-[11px] tracking-[0.15em] text-sage uppercase">
+          <span className="font-mono text-xs tracking-[0.15em] text-sage uppercase">
             {product.productType}
           </span>
         )}
@@ -57,7 +57,7 @@ export default function ProductCard({ product, index }: ProductCardProps) {
 
       {/* Taxonomy line with italic labels */}
       {collection && (
-        <p className="font-mono text-[11px] text-sage tracking-wide mb-3">
+        <p className="font-mono text-xs text-sage tracking-wide mb-3">
           <span className="italic">Genus:</span>{' '}
           <span className="text-forest">{collection.title}</span>
           {product.productType && (
@@ -79,11 +79,11 @@ export default function ProductCard({ product, index }: ProductCardProps) {
           ${price.toFixed(0)}
         </span>
         {maxPrice > price && (
-          <span className="font-mono text-[11px] text-plate-border">
+          <span className="font-mono text-xs text-plate-border">
             &ndash; ${maxPrice.toFixed(0)}
           </span>
         )}
-        <span className="font-mono text-[11px] tracking-[0.15em] text-plate-border/70 uppercase ml-auto">
+        <span className="font-mono text-xs tracking-[0.15em] text-plate-border/70 uppercase ml-auto">
           {currencyCode}
         </span>
       </div>

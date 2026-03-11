@@ -1,7 +1,10 @@
+import { Suspense } from 'react';
 import { notFound } from 'next/navigation';
 import Link from 'next/link';
 import { getProductByHandle, getProducts } from '@/lib/shopify';
 import ProductDetail from '@/components/ProductDetail';
+import ErrorBoundary from '@/components/ErrorBoundary';
+import PDPSkeleton from '@/components/PDPSkeleton';
 
 export const revalidate = 60;
 
@@ -86,7 +89,7 @@ export default async function ProductPage({ params }: { params: Promise<{ handle
       <div className="border-b border-plate-border/40 px-4 sm:px-8 py-3">
         <Link
           href="/"
-          className="inline-flex items-center gap-1 font-mono text-[11px] tracking-[0.2em] text-plate-border uppercase hover:text-forest transition-colors min-h-[44px]"
+          className="inline-flex items-center gap-1 font-mono text-xs tracking-[0.2em] text-plate-border uppercase hover:text-forest transition-colors min-h-[44px]"
         >
           &larr; Return to Field Guide
         </Link>
@@ -97,7 +100,7 @@ export default async function ProductPage({ params }: { params: Promise<{ handle
         <div className="botanical-border p-6 sm:p-8 mb-8">
           {/* Plate number and taxonomy */}
           <div className="text-center mb-6">
-            <span className="font-mono text-[11px] tracking-[0.3em] text-plate-border uppercase block mb-2">
+            <span className="font-mono text-xs tracking-[0.3em] text-plate-border uppercase block mb-2">
               Specimen Record
             </span>
             <div className="border-t border-plate-border/30 mx-auto w-24 mb-4" />
@@ -105,7 +108,7 @@ export default async function ProductPage({ params }: { params: Promise<{ handle
               {product.title}
             </h1>
             {collection && (
-              <p className="font-mono text-[11px] text-sage tracking-wide">
+              <p className="font-mono text-xs text-sage tracking-wide">
                 <span className="italic">Genus:</span>{' '}
                 <span className="text-forest">{collection.title}</span>
                 {product.productType && (
@@ -124,13 +127,15 @@ export default async function ProductPage({ params }: { params: Promise<{ handle
           <div className="border-t border-plate-border/20 mb-6" />
 
           {/* Interactive image gallery + variant selection */}
-          <ProductDetail
-            title={product.title}
-            images={images}
-            variants={variants}
-            shopifyUrl={shopifyUrl}
-            handle={product.handle}
-          />
+          <ErrorBoundary>
+            <ProductDetail
+              title={product.title}
+              images={images}
+              variants={variants}
+              shopifyUrl={shopifyUrl}
+              handle={product.handle}
+            />
+          </ErrorBoundary>
 
           {/* Specimen data table */}
           <div className="border-t border-plate-border/40 mb-1" />
@@ -138,7 +143,7 @@ export default async function ProductPage({ params }: { params: Promise<{ handle
 
           <div className="grid grid-cols-2 sm:grid-cols-3 gap-4 mb-6">
             <div>
-              <span className="font-mono text-[11px] tracking-[0.2em] text-plate-border uppercase block mb-1">
+              <span className="font-mono text-xs tracking-[0.2em] text-plate-border uppercase block mb-1">
                 Classification
               </span>
               <span className="font-mono text-[12px] text-forest">
@@ -146,7 +151,7 @@ export default async function ProductPage({ params }: { params: Promise<{ handle
               </span>
             </div>
             <div>
-              <span className="font-mono text-[11px] tracking-[0.2em] text-plate-border uppercase block mb-1">
+              <span className="font-mono text-xs tracking-[0.2em] text-plate-border uppercase block mb-1">
                 Acquisition Cost
               </span>
               <span className="font-mono text-[12px] text-forest">
@@ -154,7 +159,7 @@ export default async function ProductPage({ params }: { params: Promise<{ handle
               </span>
             </div>
             <div>
-              <span className="font-mono text-[11px] tracking-[0.2em] text-plate-border uppercase block mb-1">
+              <span className="font-mono text-xs tracking-[0.2em] text-plate-border uppercase block mb-1">
                 Availability
               </span>
               <span className="font-mono text-[12px] text-forest">
@@ -163,7 +168,7 @@ export default async function ProductPage({ params }: { params: Promise<{ handle
             </div>
             {product.tags && product.tags.length > 0 && (
               <div className="col-span-2 sm:col-span-3">
-                <span className="font-mono text-[11px] tracking-[0.2em] text-plate-border uppercase block mb-1">
+                <span className="font-mono text-xs tracking-[0.2em] text-plate-border uppercase block mb-1">
                   Tags
                 </span>
                 <span className="font-mono text-[12px] text-forest">
@@ -179,7 +184,7 @@ export default async function ProductPage({ params }: { params: Promise<{ handle
               <div className="border-t border-plate-border/40 mb-1" />
               <div className="border-t border-plate-border/20 mb-4" />
               <div>
-                <span className="font-mono text-[11px] tracking-[0.2em] text-plate-border uppercase block mb-3">
+                <span className="font-mono text-xs tracking-[0.2em] text-plate-border uppercase block mb-3">
                   Field Notes
                 </span>
                 <p className="font-sans text-sm text-ink/80 leading-relaxed">
@@ -193,7 +198,7 @@ export default async function ProductPage({ params }: { params: Promise<{ handle
         {/* Colophon footer */}
         <div className="text-center py-6">
           <div className="border-t border-plate-border/30 mx-auto w-16 mb-4" />
-          <p className="font-mono text-[11px] tracking-[0.2em] text-plate-border uppercase">
+          <p className="font-mono text-xs tracking-[0.2em] text-plate-border uppercase">
             A Field Guide to Coastal Goods &middot; Ghost Forest Surf Club
           </p>
         </div>

@@ -102,14 +102,14 @@ export default function ProductDetail({
                 priority
               />
             </div>
-            <p className="font-mono text-[11px] tracking-[0.15em] text-plate-border text-center mt-2 uppercase">
+            <p className="font-mono text-xs tracking-[0.15em] text-plate-border text-center mt-2 uppercase">
               Plate {String.fromCharCode(65 + selectedImageIndex)}.{' '}
               {selectedImage.altText || title}
             </p>
           </div>
         ) : (
           <div className="aspect-[4/5] bg-parchment-dark flex items-center justify-center botanical-border mb-3">
-            <p className="font-mono text-[11px] text-plate-border tracking-[0.15em] uppercase">
+            <p className="font-mono text-xs text-plate-border tracking-[0.15em] uppercase">
               No specimen image available
             </p>
           </div>
@@ -150,7 +150,7 @@ export default function ProductDetail({
 
           {optionNames.map((optionName) => (
             <div key={optionName} className="mb-4">
-              <span className="font-mono text-[11px] tracking-[0.2em] text-plate-border uppercase block mb-2">
+              <span className="font-mono text-xs tracking-[0.2em] text-plate-border uppercase block mb-2">
                 {optionName}
               </span>
               <div className="flex flex-wrap gap-2">
@@ -193,7 +193,7 @@ export default function ProductDetail({
             <div className="mt-3">
               <span className="font-mono text-lg text-forest">{selectedPrice}</span>
               {!isAvailable && (
-                <span className="font-mono text-[11px] text-plate-border ml-2 uppercase tracking-wider">
+                <span className="font-mono text-xs text-plate-border ml-2 uppercase tracking-wider">
                   Sold Out
                 </span>
               )}
@@ -208,7 +208,7 @@ export default function ProductDetail({
           href={checkoutUrl}
           target="_blank"
           rel="noopener noreferrer"
-          className={`block w-full text-center font-mono text-[11px] tracking-[0.2em] uppercase py-4 transition-colors min-h-[44px] flex items-center justify-center ${
+          className={`block w-full text-center font-mono text-xs tracking-[0.2em] uppercase py-4 transition-colors min-h-[44px] flex items-center justify-center ${
             isAvailable
               ? 'bg-forest text-parchment hover:bg-forest/90'
               : 'bg-plate-border/20 text-plate-border cursor-not-allowed'
@@ -225,7 +225,7 @@ export default function ProductDetail({
           href={checkoutUrl}
           target="_blank"
           rel="noopener noreferrer"
-          className={`block w-full text-center font-mono text-[11px] tracking-[0.2em] uppercase py-4 transition-colors min-h-[44px] flex items-center justify-center ${
+          className={`block w-full text-center font-mono text-xs tracking-[0.2em] uppercase py-4 transition-colors min-h-[44px] flex items-center justify-center ${
             isAvailable
               ? 'bg-forest text-parchment hover:bg-forest/90'
               : 'bg-plate-border/20 text-plate-border cursor-not-allowed'
