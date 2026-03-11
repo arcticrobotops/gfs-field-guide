@@ -23,8 +23,7 @@ export default function Navbar({
   return (
     <header className="sticky top-0 z-50 bg-parchment/95 backdrop-blur-sm">
       {/* Top double rule */}
-      <div className="border-t border-plate-border" />
-      <div className="mt-1 border-t border-plate-border" />
+      <div className="double-rule" />
 
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         {/* Brand name */}
@@ -35,17 +34,18 @@ export default function Navbar({
         </div>
 
         {/* Main banner */}
-        <div className="border-t border-plate-border" />
-        <div className="mt-1 border-t border-plate-border" />
+        <div className="double-rule" />
 
         <div className="py-4 sm:py-5 text-center">
           <h1 className="font-serif text-xl sm:text-2xl md:text-3xl tracking-[0.15em] text-forest uppercase">
             A Field Guide to Coastal Goods
           </h1>
+          <p className="font-mono text-[9px] tracking-[0.3em] text-plate-border uppercase mt-1">
+            First Edition &middot; Oregon Coast &middot; 45.10&deg;N
+          </p>
         </div>
 
-        <div className="border-b border-plate-border" />
-        <div className="mt-1 border-b border-plate-border" />
+        <div className="double-rule" />
 
         {/* Category filters - desktop */}
         <nav className="hidden md:flex items-center justify-center gap-2 py-3 flex-wrap">
@@ -156,8 +156,7 @@ export default function Navbar({
       </div>
 
       {/* Bottom double rule */}
-      <div className="border-b border-plate-border" />
-      <div className="mt-1 border-b border-plate-border" />
+      <div className="double-rule" />
     </header>
   );
 }

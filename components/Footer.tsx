@@ -3,8 +3,7 @@ export default function Footer() {
     <footer className="mt-16 sm:mt-24">
       {/* Double rule at top */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="border-t border-plate-border" />
-        <div className="mt-1 border-t border-plate-border" />
+        <div className="double-rule" />
       </div>
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 sm:py-16">

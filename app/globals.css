@@ -47,50 +47,30 @@ body::before {
   background-size: 256px 256px;
 }
 
-/* Double-rule botanical border utility */
+/* Double-rule botanical border utility — uses pseudo-element for outer rule */
 .botanical-border {
+  position: relative;
   border: 1px solid var(--plate-border);
-  outline: 1px solid var(--plate-border);
-  outline-offset: 3px;
 }
-
-.botanical-border-top {
-  border-top: 1px solid var(--plate-border);
-  box-shadow: 0 -4px 0 -3px var(--plate-border);
-}
-
-.botanical-border-bottom {
-  border-bottom: 1px solid var(--plate-border);
-  box-shadow: 0 4px 0 -3px var(--plate-border);
-}
-
-/* Double rule using pseudo-elements for precise control */
-.double-rule-top {
-  position: relative;
-}
-.double-rule-top::before {
+.botanical-border::before {
   content: "";
   position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  height: 0;
-  border-top: 1px solid var(--plate-border);
-  box-shadow: 0 4px 0 -3px var(--plate-border);
+  inset: -4px;
+  border: 1px solid var(--plate-border);
+  pointer-events: none;
 }
 
-.double-rule-bottom {
-  position: relative;
+/* Horizontal double-rule separators */
+.double-rule {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
 }
-.double-rule-bottom::after {
+.double-rule::before,
+.double-rule::after {
   content: "";
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  height: 0;
-  border-bottom: 1px solid var(--plate-border);
-  box-shadow: 0 -4px 0 -3px var(--plate-border);
+  display: block;
+  border-top: 1px solid var(--plate-border);
 }
 
 /* Small caps utility */
