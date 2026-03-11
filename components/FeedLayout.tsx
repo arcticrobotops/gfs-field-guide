@@ -92,32 +92,53 @@ export default function FeedLayout({
       />
 
       <main className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-8 sm:py-12">
-        {/* Catalog introduction */}
-        <div className="text-center mb-10 sm:mb-14">
-          <p className="font-mono text-[10px] tracking-[0.3em] text-plate-border uppercase mb-2">
-            Specimen Catalog
-          </p>
-          <p className="font-serif text-sm italic text-sage max-w-lg mx-auto leading-relaxed">
-            A curated collection of goods for the coldwater practitioner.
-            Each specimen selected for durability, function, and coastal provenance.
-          </p>
+        {/* Catalog introduction with volume numbering and double-rule framing */}
+        <div className="max-w-xl mx-auto mb-12 sm:mb-16">
+          <div className="double-rule mb-6" />
+          <div className="text-center space-y-3">
+            <p className="font-mono text-[9px] tracking-[0.35em] text-plate-border/60 uppercase">
+              Vol. I &middot; First Edition
+            </p>
+            <p className="font-mono text-[10px] tracking-[0.3em] text-plate-border uppercase">
+              Specimen Catalog
+            </p>
+            <p className="font-serif text-sm italic text-sage max-w-md mx-auto leading-relaxed">
+              A curated collection of goods for the coldwater practitioner,
+              selected for durability, function, and coastal provenance.
+              Compiled from fieldwork along the northern Oregon littoral, 44&ndash;46&deg;N.
+            </p>
+          </div>
+          <div className="double-rule mt-6" />
         </div>
 
         {/* Loading state */}
         {loading && (
           <div className="text-center py-20">
-            <p className="font-mono text-[11px] tracking-[0.2em] text-sage animate-pulse uppercase">
-              Cataloging specimens...
-            </p>
+            <div className="space-y-3">
+              <p className="font-mono text-[10px] tracking-[0.25em] text-plate-border uppercase">
+                &#9678;
+              </p>
+              <p className="font-mono text-[11px] tracking-[0.2em] text-sage animate-pulse uppercase">
+                Cataloging specimens&hellip;
+              </p>
+            </div>
           </div>
         )}
 
         {/* Empty state */}
         {!loading && products.length === 0 && (
           <div className="text-center py-20">
-            <p className="font-mono text-[11px] tracking-[0.2em] text-sage uppercase">
-              No specimens found in this collection.
-            </p>
+            <div className="space-y-3">
+              <p className="font-mono text-[10px] tracking-[0.2em] text-plate-border/50">
+                &#9678;
+              </p>
+              <p className="font-mono text-[11px] tracking-[0.2em] text-sage uppercase">
+                No specimens found in this collection.
+              </p>
+              <p className="font-serif text-xs italic text-sage/60">
+                Try selecting a different genus from the navigation above.
+              </p>
+            </div>
           </div>
         )}
 
