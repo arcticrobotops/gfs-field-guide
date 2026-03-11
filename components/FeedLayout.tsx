@@ -91,7 +91,7 @@ export default function FeedLayout({
         onCollectionChange={handleCollectionChange}
       />
 
-      <main className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-8 sm:py-12">
+      <main className="mx-auto max-w-7xl px-5 sm:px-6 lg:px-8 py-8 sm:py-12">
         {/* Catalog introduction with volume numbering and double-rule framing */}
         <div className="max-w-xl mx-auto mb-12 sm:mb-16">
           <div className="double-rule mb-6" />

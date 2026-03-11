@@ -55,9 +55,14 @@ body::before {
 .botanical-border::before {
   content: "";
   position: absolute;
-  inset: -4px;
+  inset: -3px;
   border: 1px solid var(--plate-border);
   pointer-events: none;
+}
+@media (min-width: 640px) {
+  .botanical-border::before {
+    inset: -4px;
+  }
 }
 
 /* Horizontal double-rule separators */
@@ -77,6 +82,14 @@ body::before {
 .small-caps {
   font-variant: small-caps;
   letter-spacing: 0.1em;
+}
+
+/* Mobile spacing: ensure botanical borders don't clip at 375px */
+@media (max-width: 639px) {
+  .botanical-border {
+    margin-left: 3px;
+    margin-right: 3px;
+  }
 }
 
 /* Specimen card hover & focus */
