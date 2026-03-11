@@ -1,26 +1,109 @@
 @import "tailwindcss";
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --background: #F2EBD9;
+  --foreground: #2C2416;
+  --forest: #1B3A2D;
+  --umber: #8B6914;
+  --sage: #6B7F63;
+  --ink: #2C2416;
+  --parchment: #F2EBD9;
+  --plate-border: #A69272;
+  --parchment-dark: #E8DFC9;
 }
 
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+  --color-forest: var(--forest);
+  --color-umber: var(--umber);
+  --color-sage: var(--sage);
+  --color-ink: var(--ink);
+  --color-parchment: var(--parchment);
+  --color-parchment-dark: var(--parchment-dark);
+  --color-plate-border: var(--plate-border);
+  --font-serif: "Playfair Display", Georgia, serif;
+  --font-mono: "IBM Plex Mono", "Courier New", monospace;
+  --font-sans: "DM Sans", system-ui, sans-serif;
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background: var(--parchment);
+  color: var(--ink);
+  font-family: var(--font-sans);
+  position: relative;
+}
+
+/* Paper grain texture overlay */
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  pointer-events: none;
+  opacity: 0.05;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+  background-repeat: repeat;
+  background-size: 256px 256px;
+}
+
+/* Double-rule botanical border utility */
+.botanical-border {
+  border: 1px solid var(--plate-border);
+  outline: 1px solid var(--plate-border);
+  outline-offset: 3px;
+}
+
+.botanical-border-top {
+  border-top: 1px solid var(--plate-border);
+  box-shadow: 0 -4px 0 -3px var(--plate-border);
+}
+
+.botanical-border-bottom {
+  border-bottom: 1px solid var(--plate-border);
+  box-shadow: 0 4px 0 -3px var(--plate-border);
+}
+
+/* Double rule using pseudo-elements for precise control */
+.double-rule-top {
+  position: relative;
+}
+.double-rule-top::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 0;
+  border-top: 1px solid var(--plate-border);
+  box-shadow: 0 4px 0 -3px var(--plate-border);
+}
+
+.double-rule-bottom {
+  position: relative;
+}
+.double-rule-bottom::after {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 0;
+  border-bottom: 1px solid var(--plate-border);
+  box-shadow: 0 -4px 0 -3px var(--plate-border);
+}
+
+/* Small caps utility */
+.small-caps {
+  font-variant: small-caps;
+  letter-spacing: 0.1em;
+}
+
+/* Specimen card hover */
+.specimen-card {
+  transition: border-color 0.2s ease, outline-color 0.2s ease;
+}
+.specimen-card:hover {
+  border-color: var(--umber);
+  outline-color: var(--umber);
 }
