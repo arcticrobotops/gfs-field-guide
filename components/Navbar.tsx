@@ -28,7 +28,7 @@ export default function Navbar({
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         {/* Brand name */}
         <div className="py-3 text-center">
-          <p className="font-mono text-[10px] tracking-[0.25em] text-sage uppercase">
+          <p className="font-mono text-[11px] tracking-[0.25em] text-sage uppercase">
             Ghost Forest Surf Club
           </p>
         </div>
@@ -40,7 +40,7 @@ export default function Navbar({
           <h1 className="font-serif text-xl sm:text-2xl md:text-3xl tracking-[0.15em] text-forest uppercase">
             A Field Guide to Coastal Goods
           </h1>
-          <p className="font-mono text-[9px] tracking-[0.3em] text-plate-border uppercase mt-1">
+          <p className="font-mono text-[11px] tracking-[0.3em] text-plate-border uppercase mt-1">
             First Edition &middot; Oregon Coast &middot; 45.10&deg;N
           </p>
         </div>
@@ -76,7 +76,7 @@ export default function Navbar({
 
         {/* Mobile hamburger */}
         <div className="md:hidden flex items-center justify-between py-3">
-          <span className="font-mono text-[10px] tracking-[0.15em] text-sage uppercase">
+          <span className="font-mono text-[11px] tracking-[0.15em] text-sage uppercase">
             {activeCollection === 'all'
               ? 'All Specimens'
               : filteredCollections.find((c) => c.handle === activeCollection)

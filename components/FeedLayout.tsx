@@ -96,10 +96,10 @@ export default function FeedLayout({
         <div className="max-w-xl mx-auto mb-12 sm:mb-16">
           <div className="double-rule mb-6" />
           <div className="text-center space-y-3">
-            <p className="font-mono text-[9px] tracking-[0.35em] text-plate-border/60 uppercase">
+            <p className="font-mono text-[11px] tracking-[0.35em] text-plate-border/60 uppercase">
               Vol. I &middot; First Edition
             </p>
-            <p className="font-mono text-[10px] tracking-[0.3em] text-plate-border uppercase">
+            <p className="font-mono text-[11px] tracking-[0.3em] text-plate-border uppercase">
               Specimen Catalog
             </p>
             <p className="font-serif text-sm italic text-sage max-w-md mx-auto leading-relaxed">
@@ -115,7 +115,7 @@ export default function FeedLayout({
         {loading && (
           <div className="text-center py-20">
             <div className="space-y-3">
-              <p className="font-mono text-[10px] tracking-[0.25em] text-plate-border uppercase">
+              <p className="font-mono text-[11px] tracking-[0.25em] text-plate-border uppercase">
                 &#9678;
               </p>
               <p className="font-mono text-[11px] tracking-[0.2em] text-sage animate-pulse uppercase">
@@ -129,7 +129,7 @@ export default function FeedLayout({
         {!loading && products.length === 0 && (
           <div className="text-center py-20">
             <div className="space-y-3">
-              <p className="font-mono text-[10px] tracking-[0.2em] text-plate-border/50">
+              <p className="font-mono text-[11px] tracking-[0.2em] text-plate-border/50">
                 &#9678;
               </p>
               <p className="font-mono text-[11px] tracking-[0.2em] text-sage uppercase">

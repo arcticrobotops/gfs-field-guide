@@ -48,7 +48,7 @@ export default async function ProductPage({ params }: { params: Promise<{ handle
     <main className="min-h-screen bg-parchment">
       {/* Header bar */}
       <div className="border-b border-plate-border/40 px-4 sm:px-8 py-3">
-        <Link href="/" className="font-mono text-[10px] tracking-[0.2em] text-plate-border uppercase hover:text-forest transition-colors">
+        <Link href="/" className="inline-flex items-center gap-1 font-mono text-[11px] tracking-[0.2em] text-plate-border uppercase hover:text-forest transition-colors min-h-[44px]">
           &larr; Return to Field Guide
         </Link>
       </div>
@@ -58,7 +58,7 @@ export default async function ProductPage({ params }: { params: Promise<{ handle
         <div className="botanical-border p-6 sm:p-8 mb-8">
           {/* Plate number and taxonomy */}
           <div className="text-center mb-6">
-            <span className="font-mono text-[10px] tracking-[0.3em] text-plate-border uppercase block mb-2">
+            <span className="font-mono text-[11px] tracking-[0.3em] text-plate-border uppercase block mb-2">
               Specimen Record
             </span>
             <div className="border-t border-plate-border/30 mx-auto w-24 mb-4" />
@@ -99,14 +99,14 @@ export default async function ProductPage({ params }: { params: Promise<{ handle
                       priority={i === 0}
                     />
                   </div>
-                  <p className="font-mono text-[9px] tracking-[0.15em] text-plate-border text-center mt-2 uppercase">
+                  <p className="font-mono text-[11px] tracking-[0.15em] text-plate-border text-center mt-2 uppercase">
                     Plate {String.fromCharCode(65 + i)}. {image.altText || product.title}
                   </p>
                 </div>
               ))
             ) : (
               <div className="aspect-[4/5] bg-parchment-dark flex items-center justify-center botanical-border">
-                <p className="font-mono text-[10px] text-plate-border tracking-[0.15em] uppercase">
+                <p className="font-mono text-[11px] text-plate-border tracking-[0.15em] uppercase">
                   No specimen image available
                 </p>
               </div>
@@ -119,7 +119,7 @@ export default async function ProductPage({ params }: { params: Promise<{ handle
 
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 mb-6">
             <div>
-              <span className="font-mono text-[9px] tracking-[0.2em] text-plate-border uppercase block mb-1">
+              <span className="font-mono text-[11px] tracking-[0.2em] text-plate-border uppercase block mb-1">
                 Classification
               </span>
               <span className="font-mono text-[12px] text-forest">
@@ -127,27 +127,29 @@ export default async function ProductPage({ params }: { params: Promise<{ handle
               </span>
             </div>
             <div>
-              <span className="font-mono text-[9px] tracking-[0.2em] text-plate-border uppercase block mb-1">
+              <span className="font-mono text-[11px] tracking-[0.2em] text-plate-border uppercase block mb-1">
                 Acquisition Cost
               </span>
               <span className="font-mono text-[12px] text-forest">
                 {formattedPrice} {product.priceRange.minVariantPrice.currencyCode}
               </span>
             </div>
+            {product.tags && product.tags.length > 0 && (
+              <div>
+                <span className="font-mono text-[11px] tracking-[0.2em] text-plate-border uppercase block mb-1">
+                  Tags
+                </span>
+                <span className="font-mono text-[12px] text-forest">
+                  {product.tags.slice(0, 3).join(', ')}
+                </span>
+              </div>
+            )}
             <div>
-              <span className="font-mono text-[9px] tracking-[0.2em] text-plate-border uppercase block mb-1">
-                Habitat
+              <span className="font-mono text-[11px] tracking-[0.2em] text-plate-border uppercase block mb-1">
+                Availability
               </span>
               <span className="font-mono text-[12px] text-forest">
-                Oregon Coast
-              </span>
-            </div>
-            <div>
-              <span className="font-mono text-[9px] tracking-[0.2em] text-plate-border uppercase block mb-1">
-                Season
-              </span>
-              <span className="font-mono text-[12px] text-forest">
-                All Year
+                {product.variants?.edges?.some(e => e.node.availableForSale) ? 'In Stock' : 'Out of Stock'}
               </span>
             </div>
           </div>
@@ -158,7 +160,7 @@ export default async function ProductPage({ params }: { params: Promise<{ handle
               <div className="border-t border-plate-border/40 mb-1" />
               <div className="border-t border-plate-border/20 mb-4" />
               <div>
-                <span className="font-mono text-[9px] tracking-[0.2em] text-plate-border uppercase block mb-3">
+                <span className="font-mono text-[11px] tracking-[0.2em] text-plate-border uppercase block mb-3">
                   Field Notes
                 </span>
                 <p className="font-sans text-sm text-ink/80 leading-relaxed">
@@ -184,7 +186,7 @@ export default async function ProductPage({ params }: { params: Promise<{ handle
         {/* Colophon footer */}
         <div className="text-center py-6">
           <div className="border-t border-plate-border/30 mx-auto w-16 mb-4" />
-          <p className="font-mono text-[9px] tracking-[0.2em] text-plate-border uppercase">
+          <p className="font-mono text-[11px] tracking-[0.2em] text-plate-border uppercase">
             A Field Guide to Coastal Goods &middot; Ghost Forest Surf Club
           </p>
         </div>

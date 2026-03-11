@@ -19,7 +19,7 @@ export default function Footer() {
           </p>
 
           {/* Brand + Location */}
-          <p className="font-mono text-[10px] tracking-[0.25em] text-plate-border uppercase">
+          <p className="font-mono text-[11px] tracking-[0.25em] text-plate-border uppercase">
             Ghost Forest Surf Club &middot; Neskowin, Oregon
           </p>
 
@@ -31,7 +31,7 @@ export default function Footer() {
           </div>
 
           {/* Publisher line */}
-          <p className="font-mono text-[9px] tracking-[0.2em] text-plate-border/50 uppercase pt-1">
+          <p className="font-mono text-[11px] tracking-[0.2em] text-plate-border/50 uppercase pt-1">
             Published by Ghost Forest Press, Neskowin
           </p>
 

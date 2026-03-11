@@ -53,7 +53,7 @@ export default function EditorialCard({
   return (
     <div className="botanical-border bg-parchment p-4 sm:p-5">
       {/* Plate number */}
-      <p className="font-mono text-[10px] tracking-[0.25em] text-plate-border uppercase mb-2">
+      <p className="font-mono text-[11px] tracking-[0.25em] text-plate-border uppercase mb-2">
         {plateNumber}
       </p>
 
@@ -84,7 +84,7 @@ export default function EditorialCard({
 
       {/* Location annotation */}
       {location && (
-        <p className="font-mono text-[9px] tracking-[0.2em] text-plate-border/70 uppercase mt-3">
+        <p className="font-mono text-[11px] tracking-[0.2em] text-plate-border/70 uppercase mt-3">
           {location}
         </p>
       )}
