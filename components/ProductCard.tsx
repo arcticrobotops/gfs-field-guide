@@ -1,4 +1,5 @@
 import Image from 'next/image';
+import Link from 'next/link';
 import { ShopifyProduct } from '@/types/shopify';
 
 interface ProductCardProps {
@@ -15,10 +16,8 @@ export default function ProductCard({ product, index }: ProductCardProps) {
   const specimenNumber = String(index + 1).padStart(3, '0');
 
   return (
-    <a
-      href={product.onlineStoreUrl || '#'}
-      target="_blank"
-      rel="noopener noreferrer"
+    <Link
+      href={`/products/${product.handle}`}
       className="botanical-border specimen-card block bg-parchment p-4 sm:p-5 cursor-pointer group"
     >
       {/* Specimen number header */}
@@ -88,6 +87,6 @@ export default function ProductCard({ product, index }: ProductCardProps) {
           {currencyCode}
         </span>
       </div>
-    </a>
+    </Link>
   );
 }
