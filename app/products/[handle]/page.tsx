@@ -1,7 +1,7 @@
 import { notFound } from 'next/navigation';
-import Image from 'next/image';
 import Link from 'next/link';
 import { getProductByHandle, getProducts } from '@/lib/shopify';
+import ProductDetail from '@/components/ProductDetail';
 
 export const revalidate = 60;
 
@@ -35,6 +35,7 @@ export default async function ProductPage({ params }: { params: Promise<{ handle
   }
 
   const images = product.images.edges.map((e) => e.node);
+  const variants = product.variants?.edges?.map((e) => e.node) || [];
   const price = parseFloat(product.priceRange.minVariantPrice.amount);
   const formattedPrice = new Intl.NumberFormat('en-US', {
     style: 'currency',
@@ -44,11 +45,49 @@ export default async function ProductPage({ params }: { params: Promise<{ handle
   const collection = product.collections?.edges[0]?.node;
   const shopifyUrl = product.onlineStoreUrl || `https://gfsurfclub.myshopify.com/products/${product.handle}`;
 
+  // JSON-LD structured data
+  const jsonLd = {
+    '@context': 'https://schema.org',
+    '@type': 'Product',
+    name: product.title,
+    description: product.description || '',
+    image: images.map((img) => img.url),
+    brand: {
+      '@type': 'Brand',
+      name: 'Ghost Forest Surf Club',
+    },
+    offers: variants.length > 0
+      ? variants.map((v) => ({
+          '@type': 'Offer',
+          price: v.price.amount,
+          priceCurrency: v.price.currencyCode,
+          availability: v.availableForSale
+            ? 'https://schema.org/InStock'
+            : 'https://schema.org/OutOfStock',
+          url: shopifyUrl,
+        }))
+      : {
+          '@type': 'Offer',
+          price: product.priceRange.minVariantPrice.amount,
+          priceCurrency: product.priceRange.minVariantPrice.currencyCode,
+          url: shopifyUrl,
+        },
+  };
+
   return (
     <main className="min-h-screen bg-parchment">
+      {/* JSON-LD */}
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
+
       {/* Header bar */}
       <div className="border-b border-plate-border/40 px-4 sm:px-8 py-3">
-        <Link href="/" className="inline-flex items-center gap-1 font-mono text-[11px] tracking-[0.2em] text-plate-border uppercase hover:text-forest transition-colors min-h-[44px]">
+        <Link
+          href="/"
+          className="inline-flex items-center gap-1 font-mono text-[11px] tracking-[0.2em] text-plate-border uppercase hover:text-forest transition-colors min-h-[44px]"
+        >
           &larr; Return to Field Guide
         </Link>
       </div>
@@ -84,40 +123,20 @@ export default async function ProductPage({ params }: { params: Promise<{ handle
           <div className="border-t border-plate-border/40 mb-1" />
           <div className="border-t border-plate-border/20 mb-6" />
 
-          {/* Image plates */}
-          <div className={`grid gap-4 mb-6 ${images.length > 1 ? 'grid-cols-1 sm:grid-cols-2' : 'grid-cols-1 max-w-lg mx-auto'}`}>
-            {images.length > 0 ? (
-              images.map((image, i) => (
-                <div key={i} className="botanical-border p-2">
-                  <div className="relative aspect-[4/5] bg-parchment-dark overflow-hidden">
-                    <Image
-                      src={image.url}
-                      alt={image.altText || product.title}
-                      fill
-                      sizes={images.length > 1 ? "(max-width: 640px) 100vw, 50vw" : "(max-width: 640px) 100vw, 600px"}
-                      className="object-cover"
-                      priority={i === 0}
-                    />
-                  </div>
-                  <p className="font-mono text-[11px] tracking-[0.15em] text-plate-border text-center mt-2 uppercase">
-                    Plate {String.fromCharCode(65 + i)}. {image.altText || product.title}
-                  </p>
-                </div>
-              ))
-            ) : (
-              <div className="aspect-[4/5] bg-parchment-dark flex items-center justify-center botanical-border">
-                <p className="font-mono text-[11px] text-plate-border tracking-[0.15em] uppercase">
-                  No specimen image available
-                </p>
-              </div>
-            )}
-          </div>
+          {/* Interactive image gallery + variant selection */}
+          <ProductDetail
+            title={product.title}
+            images={images}
+            variants={variants}
+            shopifyUrl={shopifyUrl}
+            handle={product.handle}
+          />
 
           {/* Specimen data table */}
           <div className="border-t border-plate-border/40 mb-1" />
           <div className="border-t border-plate-border/20 mb-6" />
 
-          <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 mb-6">
+          <div className="grid grid-cols-2 sm:grid-cols-3 gap-4 mb-6">
             <div>
               <span className="font-mono text-[11px] tracking-[0.2em] text-plate-border uppercase block mb-1">
                 Classification
@@ -134,24 +153,24 @@ export default async function ProductPage({ params }: { params: Promise<{ handle
                 {formattedPrice} {product.priceRange.minVariantPrice.currencyCode}
               </span>
             </div>
-            {product.tags && product.tags.length > 0 && (
-              <div>
-                <span className="font-mono text-[11px] tracking-[0.2em] text-plate-border uppercase block mb-1">
-                  Tags
-                </span>
-                <span className="font-mono text-[12px] text-forest">
-                  {product.tags.slice(0, 3).join(', ')}
-                </span>
-              </div>
-            )}
             <div>
               <span className="font-mono text-[11px] tracking-[0.2em] text-plate-border uppercase block mb-1">
                 Availability
               </span>
               <span className="font-mono text-[12px] text-forest">
-                {product.variants?.edges?.some(e => e.node.availableForSale) ? 'In Stock' : 'Out of Stock'}
+                {variants.some((v) => v.availableForSale) ? 'In Stock' : 'Out of Stock'}
               </span>
             </div>
+            {product.tags && product.tags.length > 0 && (
+              <div className="col-span-2 sm:col-span-3">
+                <span className="font-mono text-[11px] tracking-[0.2em] text-plate-border uppercase block mb-1">
+                  Tags
+                </span>
+                <span className="font-mono text-[12px] text-forest">
+                  {product.tags.join(', ')}
+                </span>
+              </div>
+            )}
           </div>
 
           {/* Description as field notes */}
@@ -169,18 +188,6 @@ export default async function ProductPage({ params }: { params: Promise<{ handle
               </div>
             </>
           )}
-        </div>
-
-        {/* Acquisition button */}
-        <div className="botanical-border p-4 mb-8">
-          <a
-            href={shopifyUrl}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="block w-full bg-forest text-parchment text-center font-mono text-[11px] tracking-[0.2em] uppercase py-4 hover:bg-forest/90 transition-colors"
-          >
-            Acquire Specimen
-          </a>
         </div>
 
         {/* Colophon footer */}

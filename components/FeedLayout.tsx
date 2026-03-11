@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useCallback } from 'react';
 import { ShopifyProduct, ShopifyCollection } from '@/types/shopify';
 import Navbar from './Navbar';
 import ProductCard from './ProductCard';
@@ -19,18 +19,20 @@ export default function FeedLayout({
   const [products, setProducts] = useState(initialProducts);
   const [activeCollection, setActiveCollection] = useState('all');
   const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(false);
 
   const handleCollectionChange = useCallback(async (handle: string) => {
     setActiveCollection(handle);
     setLoading(true);
+    setError(false);
 
     try {
       const params = handle !== 'all' ? `?collection=${handle}` : '';
       const res = await fetch(`/api/products${params}`);
       const data = await res.json();
       setProducts(data.products || []);
-    } catch (error) {
-      console.error('Failed to fetch products:', error);
+    } catch {
+      setError(true);
     } finally {
       setLoading(false);
     }
@@ -125,8 +127,31 @@ export default function FeedLayout({
           </div>
         )}
 
+        {/* Error state */}
+        {!loading && error && (
+          <div className="text-center py-20">
+            <div className="botanical-border max-w-md mx-auto p-8 space-y-3">
+              <p className="font-mono text-[11px] tracking-[0.2em] text-plate-border/50">
+                &#9678;
+              </p>
+              <p className="font-mono text-[11px] tracking-[0.2em] text-forest uppercase">
+                Catalog Temporarily Unavailable
+              </p>
+              <p className="font-serif text-sm italic text-sage/80">
+                We were unable to retrieve specimens at this time. Please try again.
+              </p>
+              <button
+                onClick={() => handleCollectionChange(activeCollection)}
+                className="mt-4 px-6 py-3 bg-forest text-parchment font-mono text-[11px] tracking-[0.2em] uppercase hover:bg-forest/90 transition-colors min-h-[44px]"
+              >
+                Retry
+              </button>
+            </div>
+          </div>
+        )}
+
         {/* Empty state */}
-        {!loading && products.length === 0 && (
+        {!loading && !error && products.length === 0 && (
           <div className="text-center py-20">
             <div className="space-y-3">
               <p className="font-mono text-[11px] tracking-[0.2em] text-plate-border/50">
@@ -143,7 +168,7 @@ export default function FeedLayout({
         )}
 
         {/* Feed grid */}
-        {!loading && products.length > 0 && (
+        {!loading && !error && products.length > 0 && (
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5 sm:gap-6">
             {buildFeed()}
           </div>

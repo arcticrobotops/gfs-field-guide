@@ -51,7 +51,7 @@ export default function Navbar({
         <nav className="hidden md:flex items-center justify-center gap-2 py-3 flex-wrap">
           <button
             onClick={() => onCollectionChange('all')}
-            className={`px-3 py-1 font-mono text-[11px] tracking-[0.15em] uppercase transition-colors ${
+            className={`px-3 py-2 min-h-[44px] font-mono text-[11px] tracking-[0.15em] uppercase transition-colors ${
               activeCollection === 'all'
                 ? 'bg-forest text-parchment'
                 : 'text-ink hover:text-umber'
@@ -63,7 +63,7 @@ export default function Navbar({
             <button
               key={collection.handle}
               onClick={() => onCollectionChange(collection.handle)}
-              className={`px-3 py-1 font-mono text-[11px] tracking-[0.15em] uppercase transition-colors ${
+              className={`px-3 py-2 min-h-[44px] font-mono text-[11px] tracking-[0.15em] uppercase transition-colors ${
                 activeCollection === collection.handle
                   ? 'bg-forest text-parchment'
                   : 'text-ink hover:text-umber'
@@ -84,7 +84,7 @@ export default function Navbar({
           </span>
           <button
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-            className="p-2 text-ink"
+            className="p-2 min-w-[44px] min-h-[44px] flex items-center justify-center text-ink"
             aria-label="Toggle menu"
           >
             {mobileMenuOpen ? (
@@ -127,7 +127,7 @@ export default function Navbar({
                 onCollectionChange('all');
                 setMobileMenuOpen(false);
               }}
-              className={`block w-full text-left px-3 py-2 font-mono text-[11px] tracking-[0.15em] uppercase transition-colors ${
+              className={`block w-full text-left px-3 py-3 min-h-[44px] font-mono text-[11px] tracking-[0.15em] uppercase transition-colors ${
                 activeCollection === 'all'
                   ? 'bg-forest text-parchment'
                   : 'text-ink hover:text-umber'
@@ -142,7 +142,7 @@ export default function Navbar({
                   onCollectionChange(collection.handle);
                   setMobileMenuOpen(false);
                 }}
-                className={`block w-full text-left px-3 py-2 font-mono text-[11px] tracking-[0.15em] uppercase transition-colors ${
+                className={`block w-full text-left px-3 py-3 min-h-[44px] font-mono text-[11px] tracking-[0.15em] uppercase transition-colors ${
                   activeCollection === collection.handle
                     ? 'bg-forest text-parchment'
                     : 'text-ink hover:text-umber'

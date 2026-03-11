@@ -32,6 +32,7 @@ body {
   color: var(--ink);
   font-family: var(--font-sans);
   position: relative;
+  overflow-x: hidden;
 }
 
 /* Paper grain texture overlay */
@@ -122,4 +123,9 @@ body::before {
 }
 .botanical-border:hover {
   box-shadow: 0 2px 12px rgba(44, 36, 22, 0.06);
+}
+
+/* Safe area for sticky mobile CTA */
+.safe-area-bottom {
+  padding-bottom: max(12px, env(safe-area-inset-bottom));
 }
