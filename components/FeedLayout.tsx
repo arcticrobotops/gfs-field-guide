@@ -113,17 +113,26 @@ export default function FeedLayout({
           <div className="double-rule mt-6" />
         </div>
 
-        {/* Loading state */}
+        {/* Loading skeleton state */}
         {loading && (
-          <div className="text-center py-20">
-            <div className="space-y-3">
-              <p className="font-mono text-[11px] tracking-[0.25em] text-plate-border uppercase">
-                &#9678;
-              </p>
-              <p className="font-mono text-[11px] tracking-[0.2em] text-sage animate-pulse uppercase">
-                Cataloging specimens&hellip;
-              </p>
-            </div>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5 sm:gap-6" aria-busy="true" aria-label="Loading products">
+            {Array.from({ length: 6 }).map((_, i) => (
+              <div key={`skeleton-${i}`} className="col-span-1">
+                <div className="botanical-border p-3">
+                  {/* Image placeholder */}
+                  <div className="aspect-square bg-plate-border/10 animate-pulse" />
+                  {/* Title placeholder */}
+                  <div className="mt-4 space-y-2 px-1">
+                    <div className="h-3 w-3/4 bg-plate-border/15 animate-pulse rounded-sm" />
+                    <div className="h-3 w-1/2 bg-plate-border/10 animate-pulse rounded-sm" />
+                  </div>
+                  {/* Price placeholder */}
+                  <div className="mt-3 px-1 pb-1">
+                    <div className="h-3 w-1/4 bg-plate-border/15 animate-pulse rounded-sm" />
+                  </div>
+                </div>
+              </div>
+            ))}
           </div>
         )}
 

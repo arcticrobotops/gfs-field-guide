@@ -48,10 +48,10 @@ export default function Navbar({
         <div className="double-rule" />
 
         {/* Category filters - desktop */}
-        <nav className="hidden md:flex items-center justify-center gap-2 py-3 flex-wrap">
+        <nav aria-label="Collection filters" className="hidden md:flex items-center justify-center gap-2 py-3 flex-wrap">
           <button
             onClick={() => onCollectionChange('all')}
-            className={`px-3 py-2 min-h-[44px] font-mono text-[11px] tracking-[0.15em] uppercase transition-colors ${
+            className={`px-3 py-2 min-h-[44px] font-mono text-[11px] tracking-[0.15em] uppercase transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-forest ${
               activeCollection === 'all'
                 ? 'bg-forest text-parchment'
                 : 'text-ink hover:text-umber'
@@ -63,7 +63,7 @@ export default function Navbar({
             <button
               key={collection.handle}
               onClick={() => onCollectionChange(collection.handle)}
-              className={`px-3 py-2 min-h-[44px] font-mono text-[11px] tracking-[0.15em] uppercase transition-colors ${
+              className={`px-3 py-2 min-h-[44px] font-mono text-[11px] tracking-[0.15em] uppercase transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-forest ${
                 activeCollection === collection.handle
                   ? 'bg-forest text-parchment'
                   : 'text-ink hover:text-umber'
@@ -84,8 +84,9 @@ export default function Navbar({
           </span>
           <button
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-            className="p-2 min-w-[44px] min-h-[44px] flex items-center justify-center text-ink"
+            className="p-2 min-w-[44px] min-h-[44px] flex items-center justify-center text-ink focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-forest"
             aria-label="Toggle menu"
+            aria-expanded={mobileMenuOpen}
           >
             {mobileMenuOpen ? (
               <svg
@@ -121,13 +122,13 @@ export default function Navbar({
 
         {/* Mobile menu */}
         {mobileMenuOpen && (
-          <nav className="md:hidden border-t border-plate-border py-3 space-y-1">
+          <nav aria-label="Collection filters" className="md:hidden border-t border-plate-border py-3 space-y-1">
             <button
               onClick={() => {
                 onCollectionChange('all');
                 setMobileMenuOpen(false);
               }}
-              className={`block w-full text-left px-3 py-3 min-h-[44px] font-mono text-[11px] tracking-[0.15em] uppercase transition-colors ${
+              className={`block w-full text-left px-3 py-3 min-h-[44px] font-mono text-[11px] tracking-[0.15em] uppercase transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-forest ${
                 activeCollection === 'all'
                   ? 'bg-forest text-parchment'
                   : 'text-ink hover:text-umber'
@@ -142,7 +143,7 @@ export default function Navbar({
                   onCollectionChange(collection.handle);
                   setMobileMenuOpen(false);
                 }}
-                className={`block w-full text-left px-3 py-3 min-h-[44px] font-mono text-[11px] tracking-[0.15em] uppercase transition-colors ${
+                className={`block w-full text-left px-3 py-3 min-h-[44px] font-mono text-[11px] tracking-[0.15em] uppercase transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-forest ${
                   activeCollection === collection.handle
                     ? 'bg-forest text-parchment'
                     : 'text-ink hover:text-umber'

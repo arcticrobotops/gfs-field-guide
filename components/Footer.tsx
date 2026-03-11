@@ -1,6 +1,6 @@
 export default function Footer() {
   return (
-    <footer className="mt-16 sm:mt-24">
+    <footer className="mt-16 sm:mt-24" role="contentinfo" aria-label="Site footer">
       {/* Double rule at top */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="double-rule" />
@@ -24,19 +24,19 @@ export default function Footer() {
           </p>
 
           {/* Botanical ornament divider */}
-          <div className="flex items-center justify-center gap-3 pt-4">
+          <div className="flex items-center justify-center gap-3 pt-4" aria-hidden="true">
             <div className="w-12 border-t border-plate-border/40" />
             <span className="font-serif text-xs text-plate-border/50 italic">&#167;</span>
             <div className="w-12 border-t border-plate-border/40" />
           </div>
 
           {/* Publisher line */}
-          <p className="font-mono text-[11px] tracking-[0.2em] text-plate-border/50 uppercase pt-1">
+          <p className="font-mono text-[11px] tracking-[0.2em] text-plate-border/70 uppercase pt-1">
             Published by Ghost Forest Press, Neskowin
           </p>
 
           {/* Colophon note */}
-          <p className="font-serif text-[11px] italic text-sage/70 max-w-md mx-auto leading-relaxed pt-2">
+          <p className="font-serif text-[11px] italic text-sage/80 max-w-md mx-auto leading-relaxed pt-2">
             Cataloged and illustrated in the field. All specimens sourced from the cold waters
             and ancient forests of the northern Oregon coast.
           </p>
