@@ -6,10 +6,19 @@ import Footer from '@/components/Footer';
 export const revalidate = 60;
 
 export default async function Home() {
-  const [productData, collections] = await Promise.all([
-    getProducts(50),
-    getCollections(),
-  ]);
+  let products = [];
+  let collections = [];
+
+  try {
+    const [productData, collectionsData] = await Promise.all([
+      getProducts(50),
+      getCollections(),
+    ]);
+    products = productData.products;
+    collections = collectionsData;
+  } catch (error) {
+    console.error('Failed to fetch from Shopify:', error);
+  }
 
   // Pick up to 3 hero images from first products
   const heroImages = productData.products
@@ -85,7 +94,7 @@ export default async function Home() {
       </section>
 
       <FeedLayout
-        initialProducts={productData.products}
+        initialProducts={products}
         collections={collections}
       />
       <Footer />
