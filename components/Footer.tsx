@@ -10,7 +10,7 @@ export default function Footer() {
         <div className="text-center space-y-4">
           {/* Edition */}
           <p className="font-mono text-[11px] tracking-[0.3em] text-plate-border uppercase">
-            First Edition, 2024
+            First Edition, 2025
           </p>
 
           {/* Coordinates */}
@@ -20,17 +20,20 @@ export default function Footer() {
 
           {/* Brand + Location */}
           <p className="font-mono text-[10px] tracking-[0.25em] text-plate-border uppercase">
-            Ghost Forest Surf Club &mdash; Neskowin, Oregon
+            Ghost Forest Surf Club &middot; Neskowin, Oregon
           </p>
 
-          {/* Decorative divider */}
+          {/* Botanical ornament divider */}
           <div className="flex items-center justify-center gap-3 pt-4">
-            <div className="w-8 border-t border-plate-border/50" />
-            <span className="font-mono text-[9px] text-plate-border/60 tracking-[0.2em]">
-              &#10043;
-            </span>
-            <div className="w-8 border-t border-plate-border/50" />
+            <div className="w-12 border-t border-plate-border/40" />
+            <span className="font-serif text-xs text-plate-border/50 italic">&#167;</span>
+            <div className="w-12 border-t border-plate-border/40" />
           </div>
+
+          {/* Publisher line */}
+          <p className="font-mono text-[9px] tracking-[0.2em] text-plate-border/50 uppercase pt-1">
+            Published by Ghost Forest Press, Neskowin
+          </p>
 
           {/* Colophon note */}
           <p className="font-serif text-[11px] italic text-sage/70 max-w-md mx-auto leading-relaxed pt-2">
@@ -38,6 +41,11 @@ export default function Footer() {
             and ancient forests of the northern Oregon coast.
           </p>
         </div>
+      </div>
+
+      {/* Closing double-rule */}
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-8">
+        <div className="double-rule" />
       </div>
     </footer>
   );
