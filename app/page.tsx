@@ -6,8 +6,8 @@ import Footer from '@/components/Footer';
 export const revalidate = 60;
 
 export default async function Home() {
-  let products = [];
-  let collections = [];
+  let products: any[] = [];
+  let collections: any[] = [];
 
   try {
     const [productData, collectionsData] = await Promise.all([
@@ -21,9 +21,9 @@ export default async function Home() {
   }
 
   // Pick up to 3 hero images from first products
-  const heroImages = productData.products
+  const heroImages = products
     .slice(0, 3)
-    .map((p) => p.images.edges[0]?.node)
+    .map((p: any) => p.images?.edges?.[0]?.node)
     .filter(Boolean);
 
   return (
