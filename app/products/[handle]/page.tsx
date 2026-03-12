@@ -24,9 +24,16 @@ export async function generateMetadata({ params }: { params: Promise<{ handle: s
   const { handle } = await params;
   const product = await getProductByHandle(handle);
   if (!product) return { title: 'Specimen Not Found' };
+  const image = product.images.edges[0]?.node;
+  const description = product.description?.slice(0, 160) || `Specimen: ${product.title}. Documented by Ghost Forest Surf Club.`;
   return {
     title: `${product.title} | A Field Guide to Coastal Goods`,
-    description: product.description?.slice(0, 160) || `Specimen: ${product.title}. Documented by Ghost Forest Surf Club.`,
+    description,
+    openGraph: {
+      title: `${product.title} | A Field Guide to Coastal Goods`,
+      description,
+      images: image ? [{ url: image.url, width: image.width, height: image.height, alt: image.altText || product.title }] : [],
+    },
   };
 }
 
