@@ -5,6 +5,8 @@ import FeedLayout from '@/components/FeedLayout';
 import Footer from '@/components/Footer';
 import ErrorBoundary from '@/components/ErrorBoundary';
 
+const BLUR_DATA_URL = 'data:image/svg+xml;base64,PHN2ZyB4bWxucz0naHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmcnIHdpZHRoPScxMCcgaGVpZ2h0PScxMCc+PHJlY3Qgd2lkdGg9JzEwJyBoZWlnaHQ9JzEwJyBmaWxsPScjRjVFREQ4Jy8+PC9zdmc+';
+
 export const revalidate = 60;
 
 export default async function Home() {
@@ -42,6 +44,8 @@ export default async function Home() {
               className="object-cover opacity-30"
               priority
               sizes="100vw"
+              placeholder="blur"
+              blurDataURL={BLUR_DATA_URL}
             />
             <div className="absolute inset-0 bg-gradient-to-b from-forest/60 via-forest/40 to-forest" />
           </div>
@@ -80,6 +84,8 @@ export default async function Home() {
                     fill
                     className="object-cover"
                     sizes="112px"
+                    placeholder="blur"
+                    blurDataURL={BLUR_DATA_URL}
                   />
                 </div>
               ))}

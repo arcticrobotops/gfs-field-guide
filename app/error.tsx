@@ -4,9 +4,9 @@ export default function Error({ reset }: { error: Error; reset: () => void }) {
   return (
     <div className="min-h-screen bg-parchment flex items-center justify-center px-6">
       <div className="text-center max-w-md">
-        <h2 className="font-serif text-2xl mb-4 text-ink">
+        <h1 className="font-serif text-2xl mb-4 text-ink">
           Something went wrong
-        </h2>
+        </h1>
         <p className="font-sans text-sm text-ink/60 mb-8">
           We hit a snag loading the page. This usually resolves on retry.
         </p>

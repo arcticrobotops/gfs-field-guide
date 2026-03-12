@@ -29,7 +29,7 @@ export default function FeedLayout({
     setError(false);
 
     // On mobile, scroll to product grid so results are visible
-    if (window.innerWidth < 1024) {
+    if (typeof window !== 'undefined' && window.innerWidth < 1024) {
       gridRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
     }
 
@@ -186,7 +186,7 @@ export default function FeedLayout({
 
         {/* Feed grid */}
         {!loading && !error && products.length > 0 && (
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5 sm:gap-6">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5 sm:gap-6" aria-live="polite">
             {feed}
           </div>
         )}

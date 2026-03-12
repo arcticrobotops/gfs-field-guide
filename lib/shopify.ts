@@ -1,7 +1,14 @@
 import { ShopifyProduct, ShopifyCollection, ShopifyProductDetail } from '@/types/shopify';
 
-const domain = process.env.NEXT_PUBLIC_SHOPIFY_STORE_DOMAIN!;
-const storefrontAccessToken = process.env.NEXT_PUBLIC_SHOPIFY_STOREFRONT_ACCESS_TOKEN!;
+const domain = process.env.SHOPIFY_STORE_DOMAIN;
+const storefrontAccessToken = process.env.SHOPIFY_STOREFRONT_ACCESS_TOKEN;
+
+if (!domain) {
+  throw new Error('SHOPIFY_STORE_DOMAIN environment variable is required');
+}
+if (!storefrontAccessToken) {
+  throw new Error('SHOPIFY_STOREFRONT_ACCESS_TOKEN environment variable is required');
+}
 
 const endpoint = `https://${domain}/api/2024-10/graphql.json`;
 
@@ -10,7 +17,7 @@ async function shopifyFetch<T>(query: string, variables: Record<string, unknown>
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
-      'X-Shopify-Storefront-Access-Token': storefrontAccessToken,
+      'X-Shopify-Storefront-Access-Token': storefrontAccessToken!,
     },
     body: JSON.stringify({ query, variables }),
   });

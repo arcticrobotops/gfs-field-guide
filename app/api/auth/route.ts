@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
+import crypto from 'crypto';
 
 const COOKIE_NAME = 'site-auth';
 
@@ -8,6 +9,27 @@ function getPassword(): string {
     throw new Error('SITE_PASSWORD environment variable is required');
   }
   return pw;
+}
+
+/** Validate that `next` is a safe relative path (no open redirect). */
+function sanitizeNext(raw: string): string {
+  if (!raw || !raw.startsWith('/') || raw.startsWith('//') || raw.includes('://')) {
+    return '/';
+  }
+  return raw;
+}
+
+/** Create an HMAC-signed auth token. */
+function signToken(): string {
+  const secret = process.env.SITE_PASSWORD || '';
+  return crypto.createHmac('sha256', secret).update('authenticated').digest('hex');
+}
+
+/** Verify an HMAC-signed auth token. */
+export function verifyToken(token: string): boolean {
+  const expected = signToken();
+  if (token.length !== expected.length) return false;
+  return crypto.timingSafeEqual(Buffer.from(token), Buffer.from(expected));
 }
 
 function escapeHtml(str: string): string {
@@ -20,7 +42,8 @@ function escapeHtml(str: string): string {
 }
 
 export async function GET(request: NextRequest) {
-  const next = request.nextUrl.searchParams.get('next') || '/';
+  const rawNext = request.nextUrl.searchParams.get('next') || '/';
+  const next = sanitizeNext(rawNext);
   return new NextResponse(loginHTML(next), {
     headers: { 'Content-Type': 'text/html' },
   });
@@ -30,11 +53,20 @@ export async function POST(request: NextRequest) {
   try {
     const formData = await request.formData();
     const password = formData.get('password') as string;
-    const next = formData.get('next') as string || '/';
+    const rawNext = formData.get('next') as string || '/';
+    const next = sanitizeNext(rawNext);
 
-    if (password === getPassword()) {
+    // Timing-safe password comparison
+    const expected = getPassword();
+    const pwBuffer = Buffer.from(password || '');
+    const expectedBuffer = Buffer.from(expected);
+    const lengthMatch = pwBuffer.length === expectedBuffer.length;
+    const safePassword = lengthMatch ? pwBuffer : Buffer.alloc(expectedBuffer.length);
+    const isValid = crypto.timingSafeEqual(safePassword, expectedBuffer) && lengthMatch;
+
+    if (isValid) {
       const response = NextResponse.redirect(new URL(next, request.url));
-      response.cookies.set(COOKIE_NAME, 'authenticated', {
+      response.cookies.set(COOKIE_NAME, signToken(), {
         httpOnly: true,
         secure: process.env.NODE_ENV === 'production',
         sameSite: 'lax',

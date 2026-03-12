@@ -92,6 +92,7 @@ export default function Navbar({
             className="p-2 min-w-[44px] min-h-[44px] flex items-center justify-center text-ink focus-visible:ring-2 focus-visible:ring-umber focus-visible:ring-offset-2"
             aria-label="Toggle menu"
             aria-expanded={mobileMenuOpen}
+            aria-controls="mobile-menu"
           >
             {mobileMenuOpen ? (
               <svg
@@ -129,7 +130,7 @@ export default function Navbar({
 
         {/* Mobile menu */}
         {mobileMenuOpen && (
-          <nav aria-label="Collection filters" className="md:hidden border-t border-plate-border py-3 space-y-1">
+          <nav id="mobile-menu" aria-label="Mobile collection filters" className="md:hidden border-t border-plate-border py-3 space-y-1">
             <button
               onClick={() => {
                 onCollectionChange('all');

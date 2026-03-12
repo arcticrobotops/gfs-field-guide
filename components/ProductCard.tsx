@@ -56,9 +56,9 @@ export default function ProductCard({ product, index }: ProductCardProps) {
       )}
 
       {/* Product title (specimen name) */}
-      <h3 className="font-serif text-lg sm:text-xl text-forest leading-tight mb-2 line-clamp-2">
+      <h2 className="font-serif text-lg sm:text-xl text-forest leading-tight mb-2 line-clamp-2">
         {product.title}
-      </h3>
+      </h2>
 
       {/* Taxonomy line with italic labels */}
       {collection && (

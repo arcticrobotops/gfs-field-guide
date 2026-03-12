@@ -45,12 +45,14 @@ export const metadata: Metadata = {
     title: "Ghost Forest Surf Club | A Field Guide to Coastal Goods",
     description:
       "Specimen catalog of coldwater surf goods, curated from the northern Oregon coast. First Edition. 45.10\u00b0N, 123.98\u00b0W.",
+    images: [{ url: "/og-image.jpg", width: 1200, height: 630 }],
   },
   twitter: {
     card: "summary_large_image",
     title: "Ghost Forest Surf Club | A Field Guide to Coastal Goods",
     description:
       "Specimen catalog of coldwater surf goods, curated from the northern Oregon coast. First Edition.",
+    images: [{ url: "/og-image.jpg", width: 1200, height: 630 }],
   },
   robots: {
     index: true,

@@ -6,6 +6,8 @@ import { formatPrice } from '@/lib/utils';
 import ProductDetail from '@/components/ProductDetail';
 import ErrorBoundary from '@/components/ErrorBoundary';
 
+const BLUR_DATA_URL = 'data:image/svg+xml;base64,PHN2ZyB4bWxucz0naHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmcnIHdpZHRoPScxMCcgaGVpZ2h0PScxMCc+PHJlY3Qgd2lkdGg9JzEwJyBoZWlnaHQ9JzEwJyBmaWxsPScjRjVFREQ4Jy8+PC9zdmc+';
+
 export const revalidate = 60;
 
 export async function generateStaticParams() {
@@ -28,6 +30,9 @@ export async function generateMetadata({ params }: { params: Promise<{ handle: s
   return {
     title: `${product.title} | A Field Guide to Coastal Goods`,
     description,
+    alternates: {
+      canonical: `/products/${handle}`,
+    },
     openGraph: {
       title: `${product.title} | A Field Guide to Coastal Goods`,
       description,
@@ -64,7 +69,8 @@ export default async function ProductPage({ params }: { params: Promise<{ handle
       specimenNo: String(i + 1).padStart(3, '0'),
     }));
   const formattedPrice = formatPrice(price, product.priceRange.minVariantPrice.currencyCode);
-  const shopifyUrl = product.onlineStoreUrl || `https://gfsurfclub.myshopify.com/products/${product.handle}`;
+  const shopifyDomain = process.env.SHOPIFY_STORE_DOMAIN || 'gfsurfclub.myshopify.com';
+  const shopifyUrl = product.onlineStoreUrl || `https://${shopifyDomain}/products/${product.handle}`;
 
   // JSON-LD structured data
   const jsonLd = {
@@ -100,7 +106,7 @@ export default async function ProductPage({ params }: { params: Promise<{ handle
       {/* JSON-LD */}
       <script
         type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd).replace(/</g, '\\u003c') }}
       />
 
       {/* Header bar */}
@@ -151,7 +157,6 @@ export default async function ProductPage({ params }: { params: Promise<{ handle
               images={images}
               variants={variants}
               shopifyUrl={shopifyUrl}
-              handle={product.handle}
             />
           </ErrorBoundary>
 
@@ -238,6 +243,8 @@ export default async function ProductPage({ params }: { params: Promise<{ handle
                         fill
                         sizes="(max-width: 640px) 50vw, 25vw"
                         className="object-cover transition-transform duration-500 group-hover:scale-105"
+                        placeholder="blur"
+                        blurDataURL={BLUR_DATA_URL}
                       />
                     ) : (
                       <div className="absolute inset-0 flex items-center justify-center">

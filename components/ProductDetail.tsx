@@ -24,7 +24,6 @@ interface ProductDetailProps {
   images: ProductImage[];
   variants: Variant[];
   shopifyUrl: string;
-  handle: string;
 }
 
 export default function ProductDetail({
@@ -32,7 +31,6 @@ export default function ProductDetail({
   images,
   variants,
   shopifyUrl,
-  handle,
 }: ProductDetailProps) {
   const [selectedImageIndex, setSelectedImageIndex] = useState(0);
 
@@ -82,7 +80,7 @@ export default function ProductDetail({
 
   const selectedImage = images[selectedImageIndex];
 
-  const ctaClasses = `block w-full text-center font-mono text-[13px] tracking-[0.15em] sm:tracking-[0.2em] uppercase py-4 transition-colors min-h-[44px] flex items-center justify-center`;
+  const ctaClasses = `w-full text-center font-mono text-[13px] tracking-[0.15em] sm:tracking-[0.2em] uppercase py-4 transition-colors min-h-[44px] flex items-center justify-center`;
 
   return (
     <>
@@ -215,7 +213,6 @@ export default function ProductDetail({
         ) : (
           <span
             className={`${ctaClasses} bg-plate-border/20 text-plate-border cursor-not-allowed`}
-            role="link"
             aria-disabled="true"
           >
             Currently Unavailable
@@ -230,15 +227,14 @@ export default function ProductDetail({
             href={checkoutUrl}
             target="_blank"
             rel="noopener noreferrer"
-            className="block w-full font-mono text-[13px] tracking-[0.15em] sm:tracking-[0.2em] uppercase py-4 transition-colors min-h-[44px] flex items-center justify-center gap-2 bg-forest text-parchment hover:bg-forest/90"
+            className="w-full font-mono text-[13px] tracking-[0.15em] sm:tracking-[0.2em] uppercase py-4 transition-colors min-h-[44px] flex items-center justify-center gap-2 bg-forest text-parchment hover:bg-forest/90"
           >
             <span className="max-w-[180px] truncate">Acquire Specimen</span>
             {selectedPrice && <span className="text-sm">{`\u2014 ${selectedPrice}`}</span>}
           </a>
         ) : (
           <span
-            className="block w-full font-mono text-[13px] tracking-[0.15em] sm:tracking-[0.2em] uppercase py-4 transition-colors min-h-[44px] flex items-center justify-center gap-2 bg-plate-border/20 text-plate-border cursor-not-allowed"
-            role="link"
+            className="w-full font-mono text-[13px] tracking-[0.15em] sm:tracking-[0.2em] uppercase py-4 transition-colors min-h-[44px] flex items-center justify-center gap-2 bg-plate-border/20 text-plate-border cursor-not-allowed"
             aria-disabled="true"
           >
             Currently Unavailable
