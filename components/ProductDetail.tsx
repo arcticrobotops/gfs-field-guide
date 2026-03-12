@@ -220,12 +220,12 @@ export default function ProductDetail({
       </div>
 
       {/* Sticky Mobile CTA */}
-      <div className="sm:hidden fixed bottom-0 left-0 right-0 z-40 bg-parchment border-t border-plate-border/40 p-3 safe-area-bottom">
+      <div className="sm:hidden fixed bottom-0 left-0 right-0 z-40 bg-parchment border-t border-plate-border/40 py-4 px-3 safe-area-bottom">
         <a
           href={checkoutUrl}
           target="_blank"
           rel="noopener noreferrer"
-          className={`block w-full text-center font-mono text-[13px] tracking-[0.15em] sm:tracking-[0.2em] uppercase py-4 transition-colors min-h-[44px] flex items-center justify-center ${
+          className={`block w-full font-mono text-[13px] tracking-[0.15em] sm:tracking-[0.2em] uppercase py-4 transition-colors min-h-[44px] flex items-center justify-center gap-2 ${
             isAvailable
               ? 'bg-forest text-parchment hover:bg-forest/90'
               : 'bg-plate-border/20 text-plate-border cursor-not-allowed'
@@ -233,7 +233,10 @@ export default function ProductDetail({
           aria-disabled={!isAvailable}
         >
           {isAvailable
-            ? `Acquire Specimen${selectedPrice ? ` \u2014 ${selectedPrice}` : ''}`
+            ? <>
+                <span className="max-w-[180px] truncate">Acquire Specimen</span>
+                {selectedPrice && <span className="text-sm">{`\u2014 ${selectedPrice}`}</span>}
+              </>
             : 'Currently Unavailable'}
         </a>
       </div>

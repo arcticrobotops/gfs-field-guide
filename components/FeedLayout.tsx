@@ -104,10 +104,10 @@ export default function FeedLayout({
         <div className="max-w-xl mx-auto mb-12 sm:mb-16">
           <div className="double-rule mb-6" />
           <div className="text-center space-y-3">
-            <p className="font-mono text-xs tracking-[0.35em] text-plate-border/60 uppercase">
+            <p className="font-mono text-xs tracking-[0.175em] sm:tracking-[0.35em] text-plate-border/60 uppercase">
               Vol. I &middot; First Edition
             </p>
-            <p className="font-mono text-xs tracking-[0.3em] text-plate-border uppercase">
+            <p className="font-mono text-xs tracking-[0.15em] sm:tracking-[0.3em] text-plate-border uppercase">
               Specimen Catalog
             </p>
             <p className="font-serif text-sm italic text-sage max-w-md mx-auto leading-relaxed">
@@ -149,7 +149,7 @@ export default function FeedLayout({
               <p className="font-mono text-xs tracking-[0.2em] text-plate-border/50">
                 &#9678;
               </p>
-              <p className="font-mono text-xs tracking-[0.2em] text-forest uppercase">
+              <p className="font-mono text-[13px] tracking-[0.1em] sm:tracking-[0.2em] text-forest uppercase">
                 Catalog Temporarily Unavailable
               </p>
               <p className="font-serif text-sm italic text-sage/80">
@@ -157,7 +157,7 @@ export default function FeedLayout({
               </p>
               <button
                 onClick={() => handleCollectionChange(activeCollection)}
-                className="mt-4 px-6 py-3 bg-forest text-parchment font-mono text-xs tracking-[0.2em] uppercase hover:bg-forest/90 transition-colors min-h-[44px]"
+                className="mt-4 px-6 py-3 bg-forest text-parchment font-mono text-[13px] tracking-[0.1em] sm:tracking-[0.2em] uppercase hover:bg-forest/90 transition-colors min-h-[44px]"
               >
                 Retry
               </button>
@@ -172,10 +172,10 @@ export default function FeedLayout({
               <p className="font-mono text-xs tracking-[0.2em] text-plate-border/50">
                 &#9678;
               </p>
-              <p className="font-mono text-xs tracking-[0.2em] text-sage uppercase">
+              <p className="font-mono text-[13px] tracking-[0.1em] sm:tracking-[0.2em] text-sage uppercase">
                 No specimens found in this collection.
               </p>
-              <p className="font-serif text-xs italic text-sage/60">
+              <p className="font-serif text-[13px] italic text-sage/60">
                 Try selecting a different genus from the navigation above.
               </p>
             </div>

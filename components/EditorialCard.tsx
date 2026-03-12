@@ -53,7 +53,7 @@ export default function EditorialCard({
   return (
     <div className="botanical-border bg-parchment p-4 sm:p-5">
       {/* Plate number */}
-      <p className="font-mono text-xs tracking-[0.25em] text-plate-border uppercase mb-2">
+      <p className="font-mono text-xs tracking-[0.125em] sm:tracking-[0.25em] text-plate-border uppercase mb-2">
         {plateNumber}
       </p>
 

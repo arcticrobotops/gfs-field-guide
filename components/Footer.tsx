@@ -9,17 +9,17 @@ export default function Footer() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 sm:py-16">
         <div className="text-center space-y-4">
           {/* Edition */}
-          <p className="font-mono text-[13px] tracking-[0.3em] text-plate-border uppercase">
+          <p className="font-mono text-[13px] tracking-[0.15em] sm:tracking-[0.3em] text-plate-border uppercase">
             First Edition, 2025
           </p>
 
           {/* Coordinates */}
-          <p className="font-mono text-[13px] tracking-[0.2em] text-sage">
+          <p className="font-mono text-[13px] tracking-[0.1em] sm:tracking-[0.2em] text-sage">
             45.10&deg;N, 123.98&deg;W
           </p>
 
           {/* Brand + Location */}
-          <p className="font-mono text-[13px] tracking-[0.25em] text-plate-border uppercase">
+          <p className="font-mono text-[13px] tracking-[0.125em] sm:tracking-[0.25em] text-plate-border uppercase">
             Ghost Forest Surf Club &middot; Neskowin, Oregon
           </p>
 
