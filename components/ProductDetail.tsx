@@ -170,7 +170,7 @@ export default function ProductDetail({
                       key={value}
                       onClick={() => handleOptionChange(optionName, value)}
                       disabled={!optionAvailable && !isSelected}
-                      className={`min-w-[44px] min-h-[44px] px-3 py-2 font-mono text-[12px] tracking-wide border transition-colors ${
+                      className={`min-w-[44px] min-h-[44px] px-3 py-2 font-mono text-[13px] tracking-wide border transition-colors ${
                         isSelected
                           ? 'bg-forest text-parchment border-forest'
                           : optionAvailable

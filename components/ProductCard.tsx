@@ -38,7 +38,7 @@ export default function ProductCard({ product, index }: ProductCardProps) {
       {/* Product image */}
       {image && (
         <div className="relative w-full overflow-hidden bg-parchment-dark mb-4"
-          style={{ height: 'clamp(260px, 30vw, 340px)' }}
+          style={{ height: 'clamp(200px, 28vw, 320px)' }}
         >
           <Image
             src={image.url}
@@ -51,13 +51,13 @@ export default function ProductCard({ product, index }: ProductCardProps) {
       )}
 
       {/* Product title (specimen name) */}
-      <h3 className="font-serif text-lg sm:text-xl text-forest leading-tight mb-2">
+      <h3 className="font-serif text-lg sm:text-xl text-forest leading-tight mb-2 line-clamp-2">
         {product.title}
       </h3>
 
       {/* Taxonomy line with italic labels */}
       {collection && (
-        <p className="font-mono text-xs text-sage tracking-wide mb-3">
+        <p className="font-mono text-[13px] text-sage tracking-wide sm:tracking-wider mb-3">
           <span className="italic">Genus:</span>{' '}
           <span className="text-forest">{collection.title}</span>
           {product.productType && (

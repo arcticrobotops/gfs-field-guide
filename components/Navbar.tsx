@@ -40,7 +40,7 @@ export default function Navbar({
           <h1 className="font-serif text-xl sm:text-2xl md:text-3xl tracking-[0.15em] text-forest uppercase">
             A Field Guide to Coastal Goods
           </h1>
-          <p className="font-mono text-xs tracking-[0.3em] text-plate-border uppercase mt-1">
+          <p className="font-mono text-[13px] tracking-[0.15em] sm:tracking-[0.3em] text-plate-border uppercase mt-1">
             First Edition &middot; Oregon Coast &middot; 45.10&deg;N
           </p>
         </div>
