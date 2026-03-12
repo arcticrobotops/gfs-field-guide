@@ -117,12 +117,12 @@ export default function ProductDetail({
 
         {/* Thumbnail strip */}
         {images.length > 1 && (
-          <div className="flex gap-2 overflow-x-auto pb-1">
+          <div className="flex gap-2 overflow-x-auto snap-x snap-mandatory pb-1">
             {images.map((image, i) => (
               <button
                 key={i}
                 onClick={() => setSelectedImageIndex(i)}
-                className={`relative shrink-0 w-16 h-20 sm:w-20 sm:h-24 overflow-hidden border-2 transition-colors ${
+                className={`relative snap-start shrink-0 w-16 h-20 sm:w-20 sm:h-24 overflow-hidden border-2 transition-colors ${
                   i === selectedImageIndex
                     ? 'border-forest'
                     : 'border-plate-border/30 hover:border-plate-border'

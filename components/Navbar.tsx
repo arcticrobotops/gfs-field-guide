@@ -21,7 +21,7 @@ export default function Navbar({
   );
 
   return (
-    <header className="sticky top-0 z-50 bg-parchment/95 backdrop-blur-sm">
+    <header className="sticky top-0 z-50 bg-parchment">
       {/* Top double rule */}
       <div className="double-rule" />
 
