@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useCallback } from 'react';
+import { useState, useCallback, useRef } from 'react';
 import { ShopifyProduct, ShopifyCollection } from '@/types/shopify';
 import Navbar from './Navbar';
 import ProductCard from './ProductCard';
@@ -21,11 +21,17 @@ export default function FeedLayout({
   const [activeCollection, setActiveCollection] = useState('all');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(false);
+  const gridRef = useRef<HTMLElement>(null);
 
   const handleCollectionChange = useCallback(async (handle: string) => {
     setActiveCollection(handle);
     setLoading(true);
     setError(false);
+
+    // On mobile, scroll to product grid so results are visible
+    if (window.innerWidth < 1024) {
+      gridRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
 
     try {
       const params = handle !== 'all' ? `?collection=${handle}` : '';
@@ -99,7 +105,7 @@ export default function FeedLayout({
         />
       </ErrorBoundary>
 
-      <main className="mx-auto max-w-7xl px-5 sm:px-6 lg:px-8 py-8 sm:py-12">
+      <main ref={gridRef} className="mx-auto max-w-7xl px-5 sm:px-6 lg:px-8 py-8 sm:py-12">
         {/* Catalog introduction with volume numbering and double-rule framing */}
         <div className="max-w-xl mx-auto mb-12 sm:mb-16">
           <div className="double-rule mb-6" />
