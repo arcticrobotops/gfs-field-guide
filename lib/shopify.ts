@@ -134,7 +134,6 @@ const PRODUCT_BY_HANDLE_QUERY = `
       title
       handle
       description
-      descriptionHtml
       productType
       tags
       onlineStoreUrl

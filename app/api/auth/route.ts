@@ -3,12 +3,29 @@ import crypto from 'crypto';
 
 const COOKIE_NAME = 'site-auth';
 
-function getPassword(): string {
-  const pw = process.env.SITE_PASSWORD;
-  if (!pw) {
-    throw new Error('SITE_PASSWORD environment variable is required');
+// --- In-memory rate limiter (per-IP, max 5 attempts per 60 seconds) ---
+const rateLimitMap = new Map<string, { count: number; resetAt: number }>();
+const RATE_LIMIT_MAX = 5;
+const RATE_LIMIT_WINDOW_MS = 60 * 1000;
+
+function isRateLimited(ip: string): boolean {
+  const now = Date.now();
+  const entry = rateLimitMap.get(ip);
+  if (!entry || now > entry.resetAt) {
+    rateLimitMap.set(ip, { count: 1, resetAt: now + RATE_LIMIT_WINDOW_MS });
+    return false;
   }
-  return pw;
+  entry.count++;
+  return entry.count > RATE_LIMIT_MAX;
+}
+
+/** Require an environment variable to be set; throw if missing. */
+function requireEnv(name: string): string {
+  const value = process.env[name];
+  if (!value) {
+    throw new Error(`${name} environment variable is required`);
+  }
+  return value;
 }
 
 /** Validate that `next` is a safe relative path (no open redirect). */
@@ -19,17 +36,42 @@ function sanitizeNext(raw: string): string {
   return raw;
 }
 
-/** Create an HMAC-signed auth token. */
+/**
+ * Create an HMAC-signed auth token with a timestamp payload.
+ *
+ * NOTE: This uses Node.js `crypto` because the auth route runs in the
+ * Node.js runtime. The middleware uses Web Crypto API instead because
+ * it runs in the Edge runtime. Both produce compatible HMAC-SHA256
+ * tokens with the same secret and payload format.
+ */
 function signToken(): string {
-  const secret = process.env.SITE_PASSWORD || '';
-  return crypto.createHmac('sha256', secret).update('authenticated').digest('hex');
+  const secret = requireEnv('SITE_PASSWORD');
+  const timestamp = Date.now().toString(36);
+  const payload = `authenticated|${timestamp}`;
+  const hmac = crypto.createHmac('sha256', secret).update(payload).digest('hex');
+  return `${hmac}.${timestamp}`;
 }
 
 /** Verify an HMAC-signed auth token. */
 export function verifyToken(token: string): boolean {
-  const expected = signToken();
-  if (token.length !== expected.length) return false;
-  return crypto.timingSafeEqual(Buffer.from(token), Buffer.from(expected));
+  const secret = requireEnv('SITE_PASSWORD');
+  const parts = token.split('.');
+  if (parts.length !== 2) return false;
+  const [hmac, timestamp] = parts;
+  const payload = `authenticated|${timestamp}`;
+  const expected = crypto.createHmac('sha256', secret).update(payload).digest('hex');
+  if (hmac.length !== expected.length) return false;
+  const isValid = crypto.timingSafeEqual(Buffer.from(hmac), Buffer.from(expected));
+  if (!isValid) return false;
+
+  // Reject tokens older than 30 days
+  const tokenTime = parseInt(timestamp, 36);
+  const thirtyDaysMs = 30 * 24 * 60 * 60 * 1000;
+  if (isNaN(tokenTime) || Date.now() - tokenTime > thirtyDaysMs) {
+    return false;
+  }
+
+  return true;
 }
 
 function escapeHtml(str: string): string {
@@ -51,13 +93,38 @@ export async function GET(request: NextRequest) {
 
 export async function POST(request: NextRequest) {
   try {
+    // --- Rate limiting by IP ---
+    const ip = request.headers.get('x-forwarded-for')?.split(',')[0]?.trim() || 'unknown';
+    if (isRateLimited(ip)) {
+      return new NextResponse(
+        loginHTML('/', 'Too many attempts. Please try again later.'),
+        {
+          status: 429,
+          headers: { 'Content-Type': 'text/html' },
+        }
+      );
+    }
+
+    // --- CSRF: Origin / Referer validation ---
+    const origin = request.headers.get('origin');
+    const requestHost = request.headers.get('host');
+    if (origin) {
+      const originHost = new URL(origin).host;
+      if (originHost !== requestHost) {
+        return new NextResponse(
+          JSON.stringify({ error: 'Forbidden: origin mismatch' }),
+          { status: 403, headers: { 'Content-Type': 'application/json' } }
+        );
+      }
+    }
+
     const formData = await request.formData();
     const password = formData.get('password') as string;
     const rawNext = formData.get('next') as string || '/';
     const next = sanitizeNext(rawNext);
 
     // Timing-safe password comparison
-    const expected = getPassword();
+    const expected = requireEnv('SITE_PASSWORD');
     const pwBuffer = Buffer.from(password || '');
     const expectedBuffer = Buffer.from(expected);
     const lengthMatch = pwBuffer.length === expectedBuffer.length;
@@ -157,16 +224,28 @@ function loginHTML(next: string, error?: string) {
       font-size: 13px;
       margin-bottom: 0.5rem;
     }
+    .sr-only {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      padding: 0;
+      margin: -1px;
+      overflow: hidden;
+      clip: rect(0, 0, 0, 0);
+      white-space: nowrap;
+      border-width: 0;
+    }
   </style>
 </head>
 <body>
   <div class="container">
     <p class="brand">Ghost Forest Surf Club</p>
     <h1>Enter Password</h1>
-    ${safeError ? `<p class="error">${safeError}</p>` : ''}
+    ${safeError ? `<p class="error" role="alert">${safeError}</p>` : ''}
     <form method="POST" action="/api/auth">
       <input type="hidden" name="next" value="${safeNext}" />
-      <input type="password" name="password" placeholder="Password" autofocus required />
+      <label for="password" class="sr-only">Password</label>
+      <input type="password" id="password" name="password" placeholder="Password" autofocus required />
       <button type="submit">Enter</button>
     </form>
   </div>

@@ -2,7 +2,24 @@ import { NextRequest, NextResponse } from 'next/server';
 
 const COOKIE_NAME = 'site-auth';
 
-/** Compute HMAC-SHA256 using Web Crypto API (Edge-compatible). */
+/** Require an environment variable to be set; throw if missing. */
+function requireEnv(name: string): string {
+  const value = process.env[name];
+  if (!value) {
+    throw new Error(`${name} environment variable is required`);
+  }
+  return value;
+}
+
+/**
+ * Compute HMAC-SHA256 using Web Crypto API (Edge-compatible).
+ *
+ * NOTE: This uses the Web Crypto API because middleware runs in the
+ * Edge runtime, which does not have access to Node.js `crypto`. The
+ * auth route uses Node.js `crypto` instead because it runs in the
+ * Node.js runtime. Both produce compatible HMAC-SHA256 tokens with
+ * the same secret and payload format.
+ */
 async function computeHmac(secret: string, message: string): Promise<string> {
   const enc = new TextEncoder();
   const key = await crypto.subtle.importKey(
@@ -28,11 +45,27 @@ function timingSafeEqual(a: string, b: string): boolean {
   return result === 0;
 }
 
-/** Verify an HMAC-signed auth token. */
+/** Verify an HMAC-signed auth token, including expiration check. */
 async function verifyToken(token: string): Promise<boolean> {
-  const secret = process.env.SITE_PASSWORD || '';
-  const expected = await computeHmac(secret, 'authenticated');
-  return timingSafeEqual(token, expected);
+  const secret = requireEnv('SITE_PASSWORD');
+
+  const parts = token.split('.');
+  if (parts.length !== 2) return false;
+  const [hmac, timestamp] = parts;
+
+  const payload = `authenticated|${timestamp}`;
+  const expected = await computeHmac(secret, payload);
+  const isValid = timingSafeEqual(hmac, expected);
+  if (!isValid) return false;
+
+  // Reject tokens older than 30 days
+  const tokenTime = parseInt(timestamp, 36);
+  const thirtyDaysMs = 30 * 24 * 60 * 60 * 1000;
+  if (isNaN(tokenTime) || Date.now() - tokenTime > thirtyDaysMs) {
+    return false;
+  }
+
+  return true;
 }
 
 /** Validate that `next` is a safe relative path (no open redirect). */

@@ -7,6 +7,14 @@ import ErrorBoundary from '@/components/ErrorBoundary';
 
 const BLUR_DATA_URL = 'data:image/svg+xml;base64,PHN2ZyB4bWxucz0naHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmcnIHdpZHRoPScxMCcgaGVpZ2h0PScxMCc+PHJlY3Qgd2lkdGg9JzEwJyBoZWlnaHQ9JzEwJyBmaWxsPScjRjVFREQ4Jy8+PC9zdmc+';
 
+import type { Metadata } from 'next';
+
+export const metadata: Metadata = {
+  alternates: {
+    canonical: '/',
+  },
+};
+
 export const revalidate = 60;
 
 export default async function Home() {
@@ -30,8 +38,21 @@ export default async function Home() {
     .map((p) => p.images?.edges?.[0]?.node)
     .filter(Boolean);
 
+  const websiteJsonLd = {
+    '@context': 'https://schema.org',
+    '@type': 'WebSite',
+    name: 'Ghost Forest Surf Club',
+    url: 'https://ghostforestsurfclub.com',
+    description: 'Specimen catalog of coldwater surf goods, curated from the northern Oregon coast. First Edition.',
+  };
+
   return (
     <div className="min-h-screen bg-parchment">
+      {/* WebSite JSON-LD */}
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(websiteJsonLd).replace(/</g, '\\u003c') }}
+      />
       {/* Hero Section */}
       <section className="relative overflow-hidden bg-forest">
         {/* Background image from first product */}

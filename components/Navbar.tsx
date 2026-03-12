@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect, useRef, useCallback } from 'react';
 import { ShopifyCollection } from '@/types/shopify';
 
 interface NavbarProps {
@@ -15,10 +15,34 @@ export default function Navbar({
   onCollectionChange,
 }: NavbarProps) {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const toggleRef = useRef<HTMLButtonElement>(null);
+  const menuRef = useRef<HTMLElement>(null);
 
   const filteredCollections = collections.filter(
     (c) => c.handle !== 'frontpage'
   );
+
+  const closeMenu = useCallback(() => {
+    setMobileMenuOpen(false);
+    toggleRef.current?.focus();
+  }, []);
+
+  // Focus first item when menu opens; handle Escape key
+  useEffect(() => {
+    if (mobileMenuOpen) {
+      // Focus first button inside mobile menu
+      const firstBtn = menuRef.current?.querySelector('button');
+      firstBtn?.focus();
+
+      const handleKeyDown = (e: KeyboardEvent) => {
+        if (e.key === 'Escape') {
+          closeMenu();
+        }
+      };
+      document.addEventListener('keydown', handleKeyDown);
+      return () => document.removeEventListener('keydown', handleKeyDown);
+    }
+  }, [mobileMenuOpen, closeMenu]);
 
   return (
     <header className="sticky top-0 z-50 bg-parchment">
@@ -88,6 +112,7 @@ export default function Navbar({
                   ?.title || 'All Specimens'}
           </span>
           <button
+            ref={toggleRef}
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
             className="p-2 min-w-[44px] min-h-[44px] flex items-center justify-center text-ink focus-visible:ring-2 focus-visible:ring-umber focus-visible:ring-offset-2"
             aria-label="Toggle menu"
@@ -129,44 +154,49 @@ export default function Navbar({
         </div>
 
         {/* Mobile menu */}
-        {mobileMenuOpen && (
-          <nav id="mobile-menu" aria-label="Mobile collection filters" className="md:hidden border-t border-plate-border py-3 space-y-1">
-            <button
-              onClick={() => {
-                onCollectionChange('all');
-                setMobileMenuOpen(false);
-              }}
-              aria-current={activeCollection === 'all' ? 'true' : undefined}
-              className={`block w-full text-left px-3 py-3 min-h-[44px] font-mono text-xs tracking-[0.15em] uppercase transition-colors focus-visible:ring-2 focus-visible:ring-umber focus-visible:ring-offset-2 ${
-                activeCollection === 'all'
-                  ? 'bg-forest text-parchment'
-                  : 'text-ink hover:text-umber'
-              }`}
-            >
-              All Specimens
-            </button>
-            {filteredCollections.map((collection) => {
-              const isActive = activeCollection === collection.handle;
-              return (
-                <button
-                  key={collection.handle}
-                  onClick={() => {
-                    onCollectionChange(collection.handle);
-                    setMobileMenuOpen(false);
-                  }}
-                  aria-current={isActive ? 'true' : undefined}
-                  className={`block w-full text-left px-3 py-3 min-h-[44px] font-mono text-xs tracking-[0.15em] uppercase transition-colors focus-visible:ring-2 focus-visible:ring-umber focus-visible:ring-offset-2 ${
-                    isActive
-                      ? 'bg-forest text-parchment'
-                      : 'text-ink hover:text-umber'
-                  }`}
-                >
-                  {collection.title}
-                </button>
-              );
-            })}
-          </nav>
-        )}
+        <nav
+          ref={menuRef}
+          id="mobile-menu"
+          aria-label="Mobile collection filters"
+          aria-hidden={!mobileMenuOpen}
+          {...(!mobileMenuOpen ? { inert: '' as unknown as boolean } : {})}
+          className={`md:hidden border-t border-plate-border py-3 space-y-1 ${mobileMenuOpen ? '' : 'hidden'}`}
+        >
+          <button
+            onClick={() => {
+              onCollectionChange('all');
+              closeMenu();
+            }}
+            aria-current={activeCollection === 'all' ? 'true' : undefined}
+            className={`block w-full text-left px-3 py-3 min-h-[44px] font-mono text-xs tracking-[0.15em] uppercase transition-colors focus-visible:ring-2 focus-visible:ring-umber focus-visible:ring-offset-2 ${
+              activeCollection === 'all'
+                ? 'bg-forest text-parchment'
+                : 'text-ink hover:text-umber'
+            }`}
+          >
+            All Specimens
+          </button>
+          {filteredCollections.map((collection) => {
+            const isActive = activeCollection === collection.handle;
+            return (
+              <button
+                key={collection.handle}
+                onClick={() => {
+                  onCollectionChange(collection.handle);
+                  closeMenu();
+                }}
+                aria-current={isActive ? 'true' : undefined}
+                className={`block w-full text-left px-3 py-3 min-h-[44px] font-mono text-xs tracking-[0.15em] uppercase transition-colors focus-visible:ring-2 focus-visible:ring-umber focus-visible:ring-offset-2 ${
+                  isActive
+                    ? 'bg-forest text-parchment'
+                    : 'text-ink hover:text-umber'
+                }`}
+              >
+                {collection.title}
+              </button>
+            );
+          })}
+        </nav>
       </div>
 
       {/* Bottom double rule */}

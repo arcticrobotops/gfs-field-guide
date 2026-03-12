@@ -23,27 +23,40 @@ export async function generateStaticParams() {
 
 export async function generateMetadata({ params }: { params: Promise<{ handle: string }> }) {
   const { handle } = await params;
-  const product = await getProductByHandle(handle);
-  if (!product) return { title: 'Specimen Not Found' };
-  const image = product.images.edges[0]?.node;
-  const description = product.description?.slice(0, 160) || `Specimen: ${product.title}. Documented by Ghost Forest Surf Club.`;
-  return {
-    title: `${product.title} | A Field Guide to Coastal Goods`,
-    description,
-    alternates: {
-      canonical: `/products/${handle}`,
-    },
-    openGraph: {
+  try {
+    const product = await getProductByHandle(handle);
+    if (!product) return { title: 'Specimen Not Found' };
+    const image = product.images.edges[0]?.node;
+    const description = product.description?.slice(0, 160) || `Specimen: ${product.title}. Documented by Ghost Forest Surf Club.`;
+    return {
       title: `${product.title} | A Field Guide to Coastal Goods`,
       description,
-      images: image ? [{ url: image.url, width: image.width, height: image.height, alt: image.altText || product.title }] : [],
-    },
-  };
+      alternates: {
+        canonical: `/products/${handle}`,
+      },
+      openGraph: {
+        title: `${product.title} | A Field Guide to Coastal Goods`,
+        description,
+        images: image ? [{ url: image.url, width: image.width, height: image.height, alt: image.altText || product.title }] : [],
+      },
+    };
+  } catch {
+    return {
+      title: 'Specimen | A Field Guide to Coastal Goods',
+      description: 'A specimen from the Ghost Forest Surf Club field guide.',
+    };
+  }
 }
 
 export default async function ProductPage({ params }: { params: Promise<{ handle: string }> }) {
   const { handle } = await params;
-  const product = await getProductByHandle(handle);
+
+  let product;
+  try {
+    product = await getProductByHandle(handle);
+  } catch {
+    notFound();
+  }
 
   if (!product) {
     notFound();
@@ -55,7 +68,13 @@ export default async function ProductPage({ params }: { params: Promise<{ handle
   const collection = product.collections?.edges[0]?.node;
 
   // Related specimens
-  const { products: allRelated } = await getProducts(20, undefined, collection?.handle || undefined);
+  let allRelated: Awaited<ReturnType<typeof getProducts>>['products'] = [];
+  try {
+    const result = await getProducts(20, undefined, collection?.handle || undefined);
+    allRelated = result.products;
+  } catch {
+    // Silently fail for related products - non-critical
+  }
   const relatedProducts = allRelated
     .filter((p) => p.handle !== handle)
     .slice(0, 4)
@@ -102,7 +121,7 @@ export default async function ProductPage({ params }: { params: Promise<{ handle
   };
 
   return (
-    <main className="min-h-screen bg-parchment">
+    <main id="main-content" tabIndex={-1} className="min-h-screen bg-parchment">
       {/* JSON-LD */}
       <script
         type="application/ld+json"
@@ -224,9 +243,9 @@ export default async function ProductPage({ params }: { params: Promise<{ handle
             <div className="text-center mb-6">
               <div className="border-t border-plate-border/40 mb-1" />
               <div className="border-t border-plate-border/20 mb-4" />
-              <span className="font-mono text-xs tracking-[0.3em] text-plate-border uppercase">
+              <h2 className="font-mono text-xs tracking-[0.3em] text-plate-border uppercase">
                 Related Specimens
-              </span>
+              </h2>
             </div>
             <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
               {relatedProducts.map((rp) => (

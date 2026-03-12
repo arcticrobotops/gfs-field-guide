@@ -22,8 +22,16 @@ export default function FeedLayout({
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(false);
   const gridRef = useRef<HTMLElement>(null);
+  const abortControllerRef = useRef<AbortController | null>(null);
 
   const handleCollectionChange = useCallback(async (handle: string) => {
+    // Abort any in-flight request
+    if (abortControllerRef.current) {
+      abortControllerRef.current.abort();
+    }
+    const controller = new AbortController();
+    abortControllerRef.current = controller;
+
     setActiveCollection(handle);
     setLoading(true);
     setError(false);
@@ -35,13 +43,21 @@ export default function FeedLayout({
 
     try {
       const params = handle !== 'all' ? `?collection=${handle}` : '';
-      const res = await fetch(`/api/products${params}`);
+      const res = await fetch(`/api/products${params}`, {
+        signal: controller.signal,
+      });
       const data = await res.json();
       setProducts(data.products || []);
-    } catch {
+    } catch (e) {
+      if (e instanceof DOMException && e.name === 'AbortError') {
+        // Request was aborted by a newer request; do not update state
+        return;
+      }
       setError(true);
     } finally {
-      setLoading(false);
+      if (!controller.signal.aborted) {
+        setLoading(false);
+      }
     }
   }, []);
 
@@ -101,7 +117,7 @@ export default function FeedLayout({
         />
       </ErrorBoundary>
 
-      <main id="main-content" ref={gridRef} className="mx-auto max-w-7xl px-5 sm:px-6 lg:px-8 py-8 sm:py-12">
+      <main id="main-content" tabIndex={-1} ref={gridRef} className="mx-auto max-w-7xl px-5 sm:px-6 lg:px-8 py-8 sm:py-12">
         {/* Catalog introduction with volume numbering and double-rule framing */}
         <div className="max-w-xl mx-auto mb-12 sm:mb-16">
           <div className="double-rule mb-6" />
@@ -109,9 +125,9 @@ export default function FeedLayout({
             <p className="font-mono text-xs tracking-[0.175em] sm:tracking-[0.35em] text-plate-border/60 uppercase">
               Vol. I &middot; First Edition
             </p>
-            <p className="font-mono text-xs tracking-[0.15em] sm:tracking-[0.3em] text-plate-border uppercase">
+            <h2 className="font-mono text-xs tracking-[0.15em] sm:tracking-[0.3em] text-plate-border uppercase">
               Specimen Catalog
-            </p>
+            </h2>
             <p className="font-serif text-sm italic text-sage max-w-md mx-auto leading-relaxed">
               A curated collection of goods for the coldwater practitioner,
               selected for durability, function, and coastal provenance.

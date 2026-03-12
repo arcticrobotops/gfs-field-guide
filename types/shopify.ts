@@ -52,7 +52,6 @@ export interface ShopifyVariant {
 
 export interface ShopifyProductDetail extends ShopifyProduct {
   description: string;
-  descriptionHtml: string;
   variants: {
     edges: Array<{ node: ShopifyVariant }>;
   };
