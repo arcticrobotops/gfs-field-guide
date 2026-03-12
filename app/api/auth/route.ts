@@ -1,7 +1,23 @@
 import { NextRequest, NextResponse } from 'next/server';
 
-const PASSWORD = process.env.SITE_PASSWORD || 'gfsctest';
 const COOKIE_NAME = 'site-auth';
+
+function getPassword(): string {
+  const pw = process.env.SITE_PASSWORD;
+  if (!pw) {
+    throw new Error('SITE_PASSWORD environment variable is required');
+  }
+  return pw;
+}
+
+function escapeHtml(str: string): string {
+  return str
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#039;');
+}
 
 export async function GET(request: NextRequest) {
   const next = request.nextUrl.searchParams.get('next') || '/';
@@ -16,7 +32,7 @@ export async function POST(request: NextRequest) {
     const password = formData.get('password') as string;
     const next = formData.get('next') as string || '/';
 
-    if (password === PASSWORD) {
+    if (password === getPassword()) {
       const response = NextResponse.redirect(new URL(next, request.url));
       response.cookies.set(COOKIE_NAME, 'authenticated', {
         httpOnly: true,
@@ -40,6 +56,8 @@ export async function POST(request: NextRequest) {
 }
 
 function loginHTML(next: string, error?: string) {
+  const safeNext = escapeHtml(next);
+  const safeError = error ? escapeHtml(error) : '';
   return `<!DOCTYPE html>
 <html lang="en">
 <head>
@@ -113,9 +131,9 @@ function loginHTML(next: string, error?: string) {
   <div class="container">
     <p class="brand">Ghost Forest Surf Club</p>
     <h1>Enter Password</h1>
-    ${error ? `<p class="error">${error}</p>` : ''}
+    ${safeError ? `<p class="error">${safeError}</p>` : ''}
     <form method="POST" action="/api/auth">
-      <input type="hidden" name="next" value="${next}" />
+      <input type="hidden" name="next" value="${safeNext}" />
       <input type="password" name="password" placeholder="Password" autofocus required />
       <button type="submit">Enter</button>
     </form>

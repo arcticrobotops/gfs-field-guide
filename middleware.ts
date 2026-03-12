@@ -3,8 +3,8 @@ import { NextRequest, NextResponse } from 'next/server';
 const COOKIE_NAME = 'site-auth';
 
 export function middleware(request: NextRequest) {
-  // Skip auth routes
-  if (request.nextUrl.pathname.startsWith('/api/auth')) {
+  // Skip all API routes
+  if (request.nextUrl.pathname.startsWith('/api/')) {
     return NextResponse.next();
   }
 

@@ -42,6 +42,22 @@ export interface ShopifyCollection {
   handle: string;
 }
 
+export interface ShopifyVariant {
+  id: string;
+  title: string;
+  availableForSale: boolean;
+  price: ShopifyPrice;
+  selectedOptions: Array<{ name: string; value: string }>;
+}
+
+export interface ShopifyProductDetail extends ShopifyProduct {
+  description: string;
+  descriptionHtml: string;
+  variants: {
+    edges: Array<{ node: ShopifyVariant }>;
+  };
+}
+
 // Feed card types
 export type FeedCardType = 'product' | 'editorial' | 'text-moment';
 

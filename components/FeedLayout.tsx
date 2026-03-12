@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useCallback, useRef } from 'react';
+import { useState, useCallback, useRef, useMemo } from 'react';
 import { ShopifyProduct, ShopifyCollection } from '@/types/shopify';
 import Navbar from './Navbar';
 import ProductCard from './ProductCard';
@@ -46,17 +46,16 @@ export default function FeedLayout({
   }, []);
 
   // Build the interleaved feed: products + editorials every 4 + text moments every 7
-  const buildFeed = () => {
-    const feed: React.ReactNode[] = [];
+  const feed = useMemo(() => {
+    const items: React.ReactNode[] = [];
     let editorialIndex = 0;
     let fieldNoteIndex = 0;
-    let globalIndex = 0;
 
     products.forEach((product, productIndex) => {
       // Insert editorial every 4 products (after 4th, 8th, 12th...)
       if (productIndex > 0 && productIndex % 4 === 0) {
         const editorial = getEditorial(editorialIndex);
-        feed.push(
+        items.push(
           <ErrorBoundary key={`editorial-${editorialIndex}`}>
             <div className="col-span-1 md:col-span-2">
               <EditorialCard {...editorial} />
@@ -64,13 +63,12 @@ export default function FeedLayout({
           </ErrorBoundary>
         );
         editorialIndex++;
-        globalIndex++;
       }
 
       // Insert text moment every 7 products (after 7th, 14th...)
       if (productIndex > 0 && productIndex % 7 === 0) {
         const note = getFieldNote(fieldNoteIndex);
-        feed.push(
+        items.push(
           <ErrorBoundary key={`note-${fieldNoteIndex}`}>
             <div className="col-span-1">
               <TextMoment content={note} observationIndex={fieldNoteIndex} />
@@ -78,22 +76,20 @@ export default function FeedLayout({
           </ErrorBoundary>
         );
         fieldNoteIndex++;
-        globalIndex++;
       }
 
       // Product card
-      feed.push(
+      items.push(
         <ErrorBoundary key={product.id}>
           <div className="col-span-1">
             <ProductCard product={product} index={productIndex} />
           </div>
         </ErrorBoundary>
       );
-      globalIndex++;
     });
 
-    return feed;
-  };
+    return items;
+  }, [products]);
 
   return (
     <>
@@ -105,7 +101,7 @@ export default function FeedLayout({
         />
       </ErrorBoundary>
 
-      <main ref={gridRef} className="mx-auto max-w-7xl px-5 sm:px-6 lg:px-8 py-8 sm:py-12">
+      <main id="main-content" ref={gridRef} className="mx-auto max-w-7xl px-5 sm:px-6 lg:px-8 py-8 sm:py-12">
         {/* Catalog introduction with volume numbering and double-rule framing */}
         <div className="max-w-xl mx-auto mb-12 sm:mb-16">
           <div className="double-rule mb-6" />
@@ -191,7 +187,7 @@ export default function FeedLayout({
         {/* Feed grid */}
         {!loading && !error && products.length > 0 && (
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5 sm:gap-6">
-            {buildFeed()}
+            {feed}
           </div>
         )}
       </main>

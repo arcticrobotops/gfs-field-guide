@@ -1,11 +1,10 @@
-import { Suspense } from 'react';
 import { notFound } from 'next/navigation';
 import Link from 'next/link';
 import Image from 'next/image';
 import { getProductByHandle, getProducts } from '@/lib/shopify';
+import { formatPrice } from '@/lib/utils';
 import ProductDetail from '@/components/ProductDetail';
 import ErrorBoundary from '@/components/ErrorBoundary';
-import PDPSkeleton from '@/components/PDPSkeleton';
 
 export const revalidate = 60;
 
@@ -64,11 +63,7 @@ export default async function ProductPage({ params }: { params: Promise<{ handle
       productType: p.productType,
       specimenNo: String(i + 1).padStart(3, '0'),
     }));
-  const formattedPrice = new Intl.NumberFormat('en-US', {
-    style: 'currency',
-    currency: product.priceRange.minVariantPrice.currencyCode,
-    minimumFractionDigits: 0,
-  }).format(price);
+  const formattedPrice = formatPrice(price, product.priceRange.minVariantPrice.currencyCode);
   const shopifyUrl = product.onlineStoreUrl || `https://gfsurfclub.myshopify.com/products/${product.handle}`;
 
   // JSON-LD structured data
@@ -257,7 +252,7 @@ export default async function ProductPage({ params }: { params: Promise<{ handle
                     {rp.title}
                   </h3>
                   <p className="font-mono text-xs text-sage mt-1">
-                    ${rp.price % 1 === 0 ? rp.price.toFixed(0) : rp.price.toFixed(2)}
+                    {formatPrice(rp.price)}
                   </p>
                 </Link>
               ))}

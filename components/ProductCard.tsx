@@ -1,6 +1,7 @@
 import Image from 'next/image';
 import Link from 'next/link';
 import { ShopifyProduct } from '@/types/shopify';
+import { formatPrice } from '@/lib/utils';
 
 const BLUR_DATA_URL = 'data:image/svg+xml;base64,PHN2ZyB4bWxucz0naHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmcnIHdpZHRoPScxMCcgaGVpZ2h0PScxMCc+PHJlY3Qgd2lkdGg9JzEwJyBoZWlnaHQ9JzEwJyBmaWxsPScjRjVFREQ4Jy8+PC9zdmc+';
 
@@ -61,7 +62,7 @@ export default function ProductCard({ product, index }: ProductCardProps) {
 
       {/* Taxonomy line with italic labels */}
       {collection && (
-        <p className="font-mono text-[13px] text-sage tracking-wide sm:tracking-wider mb-3">
+        <p className="font-mono text-[13px] text-sage tracking-wide sm:tracking-wider mb-3 truncate">
           <span className="italic">Genus:</span>{' '}
           <span className="text-forest">{collection.title}</span>
           {product.productType && (
@@ -80,11 +81,11 @@ export default function ProductCard({ product, index }: ProductCardProps) {
       {/* Price with USD annotation */}
       <div className="flex items-baseline gap-2">
         <span className="font-mono text-sm text-ink">
-          ${price.toFixed(0)}
+          {formatPrice(price, currencyCode)}
         </span>
         {maxPrice > price && (
           <span className="font-mono text-[13px] text-plate-border">
-            &ndash; ${maxPrice.toFixed(0)}
+            &ndash; {formatPrice(maxPrice, currencyCode)}
           </span>
         )}
         <span className="font-mono text-[13px] tracking-[0.1em] sm:tracking-[0.15em] text-plate-border/70 uppercase ml-auto">

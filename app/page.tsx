@@ -1,5 +1,6 @@
 import Image from 'next/image';
 import { getProducts, getCollections } from '@/lib/shopify';
+import { ShopifyProduct, ShopifyCollection } from '@/types/shopify';
 import FeedLayout from '@/components/FeedLayout';
 import Footer from '@/components/Footer';
 import ErrorBoundary from '@/components/ErrorBoundary';
@@ -7,8 +8,8 @@ import ErrorBoundary from '@/components/ErrorBoundary';
 export const revalidate = 60;
 
 export default async function Home() {
-  let products: any[] = [];
-  let collections: any[] = [];
+  let products: ShopifyProduct[] = [];
+  let collections: ShopifyCollection[] = [];
 
   try {
     const [productData, collectionsData] = await Promise.all([
@@ -24,7 +25,7 @@ export default async function Home() {
   // Pick up to 3 hero images from first products
   const heroImages = products
     .slice(0, 3)
-    .map((p: any) => p.images?.edges?.[0]?.node)
+    .map((p) => p.images?.edges?.[0]?.node)
     .filter(Boolean);
 
   return (

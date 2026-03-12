@@ -37,9 +37,9 @@ export default function Navbar({
         <div className="double-rule" />
 
         <div className="py-4 sm:py-5 text-center">
-          <h1 className="font-serif text-xl sm:text-2xl md:text-3xl tracking-[0.15em] text-forest uppercase">
+          <span className="font-serif text-xl sm:text-2xl md:text-3xl tracking-[0.15em] text-forest uppercase block">
             A Field Guide to Coastal Goods
-          </h1>
+          </span>
           <p className="font-mono text-[13px] tracking-[0.15em] sm:tracking-[0.3em] text-plate-border uppercase mt-1">
             First Edition &middot; Oregon Coast &middot; 45.10&deg;N
           </p>
@@ -51,7 +51,8 @@ export default function Navbar({
         <nav aria-label="Collection filters" className="hidden md:flex items-center justify-center gap-2 py-3 flex-wrap">
           <button
             onClick={() => onCollectionChange('all')}
-            className={`px-3 py-2 min-h-[44px] font-mono text-xs tracking-[0.15em] uppercase transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-forest ${
+            aria-current={activeCollection === 'all' ? 'true' : undefined}
+            className={`px-3 py-2 min-h-[44px] font-mono text-xs tracking-[0.15em] uppercase transition-colors focus-visible:ring-2 focus-visible:ring-umber focus-visible:ring-offset-2 ${
               activeCollection === 'all'
                 ? 'bg-forest text-parchment'
                 : 'text-ink hover:text-umber'
@@ -59,19 +60,23 @@ export default function Navbar({
           >
             All Specimens
           </button>
-          {filteredCollections.map((collection) => (
-            <button
-              key={collection.handle}
-              onClick={() => onCollectionChange(collection.handle)}
-              className={`px-3 py-2 min-h-[44px] font-mono text-xs tracking-[0.15em] uppercase transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-forest ${
-                activeCollection === collection.handle
-                  ? 'bg-forest text-parchment'
-                  : 'text-ink hover:text-umber'
-              }`}
-            >
-              {collection.title}
-            </button>
-          ))}
+          {filteredCollections.map((collection) => {
+            const isActive = activeCollection === collection.handle;
+            return (
+              <button
+                key={collection.handle}
+                onClick={() => onCollectionChange(collection.handle)}
+                aria-current={isActive ? 'true' : undefined}
+                className={`px-3 py-2 min-h-[44px] font-mono text-xs tracking-[0.15em] uppercase transition-colors focus-visible:ring-2 focus-visible:ring-umber focus-visible:ring-offset-2 ${
+                  isActive
+                    ? 'bg-forest text-parchment'
+                    : 'text-ink hover:text-umber'
+                }`}
+              >
+                {collection.title}
+              </button>
+            );
+          })}
         </nav>
 
         {/* Mobile hamburger */}
@@ -84,7 +89,7 @@ export default function Navbar({
           </span>
           <button
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-            className="p-2 min-w-[44px] min-h-[44px] flex items-center justify-center text-ink focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-forest"
+            className="p-2 min-w-[44px] min-h-[44px] flex items-center justify-center text-ink focus-visible:ring-2 focus-visible:ring-umber focus-visible:ring-offset-2"
             aria-label="Toggle menu"
             aria-expanded={mobileMenuOpen}
           >
@@ -94,6 +99,7 @@ export default function Navbar({
                 fill="none"
                 viewBox="0 0 24 24"
                 stroke="currentColor"
+                aria-hidden="true"
               >
                 <path
                   strokeLinecap="round"
@@ -108,6 +114,7 @@ export default function Navbar({
                 fill="none"
                 viewBox="0 0 24 24"
                 stroke="currentColor"
+                aria-hidden="true"
               >
                 <path
                   strokeLinecap="round"
@@ -128,7 +135,8 @@ export default function Navbar({
                 onCollectionChange('all');
                 setMobileMenuOpen(false);
               }}
-              className={`block w-full text-left px-3 py-3 min-h-[44px] font-mono text-xs tracking-[0.15em] uppercase transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-forest ${
+              aria-current={activeCollection === 'all' ? 'true' : undefined}
+              className={`block w-full text-left px-3 py-3 min-h-[44px] font-mono text-xs tracking-[0.15em] uppercase transition-colors focus-visible:ring-2 focus-visible:ring-umber focus-visible:ring-offset-2 ${
                 activeCollection === 'all'
                   ? 'bg-forest text-parchment'
                   : 'text-ink hover:text-umber'
@@ -136,22 +144,26 @@ export default function Navbar({
             >
               All Specimens
             </button>
-            {filteredCollections.map((collection) => (
-              <button
-                key={collection.handle}
-                onClick={() => {
-                  onCollectionChange(collection.handle);
-                  setMobileMenuOpen(false);
-                }}
-                className={`block w-full text-left px-3 py-3 min-h-[44px] font-mono text-xs tracking-[0.15em] uppercase transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-forest ${
-                  activeCollection === collection.handle
-                    ? 'bg-forest text-parchment'
-                    : 'text-ink hover:text-umber'
-                }`}
-              >
-                {collection.title}
-              </button>
-            ))}
+            {filteredCollections.map((collection) => {
+              const isActive = activeCollection === collection.handle;
+              return (
+                <button
+                  key={collection.handle}
+                  onClick={() => {
+                    onCollectionChange(collection.handle);
+                    setMobileMenuOpen(false);
+                  }}
+                  aria-current={isActive ? 'true' : undefined}
+                  className={`block w-full text-left px-3 py-3 min-h-[44px] font-mono text-xs tracking-[0.15em] uppercase transition-colors focus-visible:ring-2 focus-visible:ring-umber focus-visible:ring-offset-2 ${
+                    isActive
+                      ? 'bg-forest text-parchment'
+                      : 'text-ink hover:text-umber'
+                  }`}
+                >
+                  {collection.title}
+                </button>
+              );
+            })}
           </nav>
         )}
       </div>

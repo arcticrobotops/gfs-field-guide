@@ -71,6 +71,12 @@ export default function RootLayout({
       <body
         className={`${playfair.variable} ${ibmPlexMono.variable} ${dmSans.variable} antialiased`}
       >
+        <a
+          href="#main-content"
+          className="sr-only focus:not-sr-only focus:absolute focus:z-[100] focus:top-2 focus:left-2 focus:px-4 focus:py-2 focus:bg-forest focus:text-parchment focus:font-mono focus:text-sm focus:tracking-wider focus:uppercase"
+        >
+          Skip to content
+        </a>
         {children}
       </body>
     </html>

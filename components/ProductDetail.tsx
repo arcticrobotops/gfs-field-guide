@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import Image from 'next/image';
+import { formatPrice } from '@/lib/utils';
 
 interface ProductImage {
   url: string;
@@ -69,11 +70,7 @@ export default function ProductDetail({
   };
 
   const selectedPrice = selectedVariant
-    ? new Intl.NumberFormat('en-US', {
-        style: 'currency',
-        currency: selectedVariant.price.currencyCode,
-        minimumFractionDigits: 0,
-      }).format(parseFloat(selectedVariant.price.amount))
+    ? formatPrice(selectedVariant.price.amount, selectedVariant.price.currencyCode)
     : null;
 
   const isAvailable = selectedVariant?.availableForSale ?? false;
@@ -84,6 +81,8 @@ export default function ProductDetail({
     : shopifyUrl;
 
   const selectedImage = images[selectedImageIndex];
+
+  const ctaClasses = `block w-full text-center font-mono text-[13px] tracking-[0.15em] sm:tracking-[0.2em] uppercase py-4 transition-colors min-h-[44px] flex items-center justify-center`;
 
   return (
     <>
@@ -204,41 +203,47 @@ export default function ProductDetail({
 
       {/* Desktop Acquisition button */}
       <div className="hidden sm:block botanical-border p-4 mb-8">
-        <a
-          href={checkoutUrl}
-          target="_blank"
-          rel="noopener noreferrer"
-          className={`block w-full text-center font-mono text-[13px] tracking-[0.15em] sm:tracking-[0.2em] uppercase py-4 transition-colors min-h-[44px] flex items-center justify-center ${
-            isAvailable
-              ? 'bg-forest text-parchment hover:bg-forest/90'
-              : 'bg-plate-border/20 text-plate-border cursor-not-allowed'
-          }`}
-          aria-disabled={!isAvailable}
-        >
-          {isAvailable ? 'Acquire Specimen' : 'Currently Unavailable'}
-        </a>
+        {isAvailable ? (
+          <a
+            href={checkoutUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            className={`${ctaClasses} bg-forest text-parchment hover:bg-forest/90`}
+          >
+            Acquire Specimen
+          </a>
+        ) : (
+          <span
+            className={`${ctaClasses} bg-plate-border/20 text-plate-border cursor-not-allowed`}
+            role="link"
+            aria-disabled="true"
+          >
+            Currently Unavailable
+          </span>
+        )}
       </div>
 
       {/* Sticky Mobile CTA */}
       <div className="sm:hidden fixed bottom-0 left-0 right-0 z-40 bg-parchment border-t border-plate-border/40 py-4 px-3 safe-area-bottom">
-        <a
-          href={checkoutUrl}
-          target="_blank"
-          rel="noopener noreferrer"
-          className={`block w-full font-mono text-[13px] tracking-[0.15em] sm:tracking-[0.2em] uppercase py-4 transition-colors min-h-[44px] flex items-center justify-center gap-2 ${
-            isAvailable
-              ? 'bg-forest text-parchment hover:bg-forest/90'
-              : 'bg-plate-border/20 text-plate-border cursor-not-allowed'
-          }`}
-          aria-disabled={!isAvailable}
-        >
-          {isAvailable
-            ? <>
-                <span className="max-w-[180px] truncate">Acquire Specimen</span>
-                {selectedPrice && <span className="text-sm">{`\u2014 ${selectedPrice}`}</span>}
-              </>
-            : 'Currently Unavailable'}
-        </a>
+        {isAvailable ? (
+          <a
+            href={checkoutUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="block w-full font-mono text-[13px] tracking-[0.15em] sm:tracking-[0.2em] uppercase py-4 transition-colors min-h-[44px] flex items-center justify-center gap-2 bg-forest text-parchment hover:bg-forest/90"
+          >
+            <span className="max-w-[180px] truncate">Acquire Specimen</span>
+            {selectedPrice && <span className="text-sm">{`\u2014 ${selectedPrice}`}</span>}
+          </a>
+        ) : (
+          <span
+            className="block w-full font-mono text-[13px] tracking-[0.15em] sm:tracking-[0.2em] uppercase py-4 transition-colors min-h-[44px] flex items-center justify-center gap-2 bg-plate-border/20 text-plate-border cursor-not-allowed"
+            role="link"
+            aria-disabled="true"
+          >
+            Currently Unavailable
+          </span>
+        )}
       </div>
 
       {/* Spacer for sticky CTA on mobile */}
