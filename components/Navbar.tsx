@@ -28,7 +28,7 @@ export default function Navbar({
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         {/* Brand name */}
         <div className="py-3 text-center">
-          <p className="font-mono text-xs tracking-[0.25em] text-sage uppercase">
+          <p className="font-mono text-[13px] tracking-[0.25em] text-sage uppercase">
             Ghost Forest Surf Club
           </p>
         </div>

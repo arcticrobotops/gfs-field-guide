@@ -150,7 +150,7 @@ export default function ProductDetail({
 
           {optionNames.map((optionName) => (
             <div key={optionName} className="mb-4">
-              <span className="font-mono text-xs tracking-[0.2em] text-plate-border uppercase block mb-2">
+              <span className="font-mono text-xs tracking-[0.15em] sm:tracking-[0.2em] text-plate-border uppercase block mb-2">
                 {optionName}
               </span>
               <div className="flex flex-wrap gap-2">
@@ -208,7 +208,7 @@ export default function ProductDetail({
           href={checkoutUrl}
           target="_blank"
           rel="noopener noreferrer"
-          className={`block w-full text-center font-mono text-xs tracking-[0.2em] uppercase py-4 transition-colors min-h-[44px] flex items-center justify-center ${
+          className={`block w-full text-center font-mono text-[13px] tracking-[0.15em] sm:tracking-[0.2em] uppercase py-4 transition-colors min-h-[44px] flex items-center justify-center ${
             isAvailable
               ? 'bg-forest text-parchment hover:bg-forest/90'
               : 'bg-plate-border/20 text-plate-border cursor-not-allowed'
@@ -225,7 +225,7 @@ export default function ProductDetail({
           href={checkoutUrl}
           target="_blank"
           rel="noopener noreferrer"
-          className={`block w-full text-center font-mono text-xs tracking-[0.2em] uppercase py-4 transition-colors min-h-[44px] flex items-center justify-center ${
+          className={`block w-full text-center font-mono text-[13px] tracking-[0.15em] sm:tracking-[0.2em] uppercase py-4 transition-colors min-h-[44px] flex items-center justify-center ${
             isAvailable
               ? 'bg-forest text-parchment hover:bg-forest/90'
               : 'bg-plate-border/20 text-plate-border cursor-not-allowed'
