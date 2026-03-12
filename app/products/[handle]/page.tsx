@@ -1,6 +1,7 @@
 import { Suspense } from 'react';
 import { notFound } from 'next/navigation';
 import Link from 'next/link';
+import Image from 'next/image';
 import { getProductByHandle, getProducts } from '@/lib/shopify';
 import ProductDetail from '@/components/ProductDetail';
 import ErrorBoundary from '@/components/ErrorBoundary';
@@ -40,12 +41,27 @@ export default async function ProductPage({ params }: { params: Promise<{ handle
   const images = product.images.edges.map((e) => e.node);
   const variants = product.variants?.edges?.map((e) => e.node) || [];
   const price = parseFloat(product.priceRange.minVariantPrice.amount);
+  const collection = product.collections?.edges[0]?.node;
+
+  // Related specimens
+  const { products: allRelated } = await getProducts(20, undefined, collection?.handle || undefined);
+  const relatedProducts = allRelated
+    .filter((p) => p.handle !== handle)
+    .slice(0, 4)
+    .map((p, i) => ({
+      handle: p.handle,
+      title: p.title,
+      price: parseFloat(p.priceRange.minVariantPrice.amount),
+      imageUrl: p.images.edges[0]?.node.url || null,
+      imageAlt: p.images.edges[0]?.node.altText || null,
+      productType: p.productType,
+      specimenNo: String(i + 1).padStart(3, '0'),
+    }));
   const formattedPrice = new Intl.NumberFormat('en-US', {
     style: 'currency',
     currency: product.priceRange.minVariantPrice.currencyCode,
     minimumFractionDigits: 0,
   }).format(price);
-  const collection = product.collections?.edges[0]?.node;
   const shopifyUrl = product.onlineStoreUrl || `https://gfsurfclub.myshopify.com/products/${product.handle}`;
 
   // JSON-LD structured data
@@ -194,6 +210,55 @@ export default async function ProductPage({ params }: { params: Promise<{ handle
             </>
           )}
         </div>
+
+        {/* Related Specimens */}
+        {relatedProducts.length > 0 && (
+          <div className="botanical-border p-6 sm:p-8 mb-8">
+            <div className="text-center mb-6">
+              <div className="border-t border-plate-border/40 mb-1" />
+              <div className="border-t border-plate-border/20 mb-4" />
+              <span className="font-mono text-xs tracking-[0.3em] text-plate-border uppercase">
+                Related Specimens
+              </span>
+            </div>
+            <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
+              {relatedProducts.map((rp) => (
+                <Link
+                  key={rp.handle}
+                  href={`/products/${rp.handle}`}
+                  className="group block"
+                >
+                  <div className="relative aspect-[3/4] overflow-hidden bg-parchment border border-plate-border/30 mb-2 group-hover:border-forest transition-colors">
+                    {rp.imageUrl ? (
+                      <Image
+                        src={rp.imageUrl}
+                        alt={rp.imageAlt || rp.title}
+                        fill
+                        sizes="(max-width: 640px) 50vw, 25vw"
+                        className="object-cover transition-transform duration-500 group-hover:scale-105"
+                      />
+                    ) : (
+                      <div className="absolute inset-0 flex items-center justify-center">
+                        <span className="font-mono text-xs text-plate-border">No image</span>
+                      </div>
+                    )}
+                  </div>
+                  <p className="font-mono text-[10px] tracking-[0.25em] text-plate-border uppercase mb-1">
+                    No. {rp.specimenNo}
+                  </p>
+                  <h3 className="font-serif text-sm text-forest leading-tight line-clamp-2 group-hover:text-umber transition-colors">
+                    {rp.title}
+                  </h3>
+                  <p className="font-mono text-xs text-sage mt-1">
+                    ${rp.price % 1 === 0 ? rp.price.toFixed(0) : rp.price.toFixed(2)}
+                  </p>
+                </Link>
+              ))}
+            </div>
+            <div className="border-t border-plate-border/20 mt-6 pt-1" />
+            <div className="border-t border-plate-border/40" />
+          </div>
+        )}
 
         {/* Colophon footer */}
         <div className="text-center py-6">
